@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:icon="@drawable/baseline_arrow_forward_black_18dp"
-        android:iconTint="#FFFFFF"
+        android:icon="@drawable/b25"
+        android:iconTint="#0000FF"
         app:showAsAction="always" />
 
 </menu>

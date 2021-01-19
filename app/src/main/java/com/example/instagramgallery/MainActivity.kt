@@ -1,9 +1,13 @@
 package com.example.instagramgallery
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import com.example.instagramgallery.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,12 +16,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
 
         setSupportActionBar(viewBinding.tb)
-
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(android.R.drawable.ic_menu_close_clear_cancel)
-        supportActionBar?.title = "New Post"
-        //this.getSupportActionBar().setHomeAsUpIndicator
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.b8)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

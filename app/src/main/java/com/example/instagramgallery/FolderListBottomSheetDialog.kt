@@ -30,7 +30,7 @@ class FolderListBottomSheetDialog  : BottomSheetDialogFragment(){
 
         viewBinding.rv.adapter = FolderAdapter(object: ((String) -> Unit){
             override fun invoke(p1: String) {
-                //dismiss()
+                dismiss()
             }
         }).apply {
             setFolders(mediaContentResolver.getFolderList())
@@ -62,6 +62,9 @@ class FolderAdapter(val listener: (url: String) -> Unit) : RecyclerView.Adapter<
 
     override fun onBindViewHolder(holder: FolderViewHolder, position: Int) {
         holder.viewBinding.tv.text = folders[position]
+        holder.viewBinding.root.setOnClickListener {
+            listener.invoke(folders[position])
+        }
     }
 }
 

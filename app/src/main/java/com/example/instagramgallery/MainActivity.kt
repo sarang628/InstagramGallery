@@ -1,18 +1,16 @@
 package com.example.instagramgallery
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.instagramgallery.databinding.ActivityMainBinding
 import com.example.mediacontentresolverlibrary.MediaContentResolver
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,8 +27,21 @@ class MainActivity : AppCompatActivity() {
 
         mediaContentResolver.requestPermission(this)
 
-        viewBinding.recyclerView2.adapter = ImgAdapter().apply {
+        viewBinding.recyclerView2.adapter = ImgAdapter(object : ((String) -> Unit) {
+            override fun invoke(p1: String) {
+                Glide
+                    .with(this@MainActivity)
+                    .load(p1)
+                    .centerCrop()
+                    .into(viewBinding.imageView);
+            }
+        }).apply {
             setPicturePaths(mediaContentResolver.getPictureList())
+        }
+
+
+        viewBinding.tv.setOnClickListener {
+            FolderListBottomSheetDialog().show(supportFragmentManager, "dialog")
         }
     }
 
@@ -40,15 +51,19 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class ImgAdapter : RecyclerView.Adapter<ImageViewHolder>(){
+class ImgAdapter(val listener: (url: String) -> Unit) : RecyclerView.Adapter<ImageViewHolder>() {
     var picturePath = ArrayList<String>()
 
-    fun setPicturePaths(list : ArrayList<String>){
+    fun setPicturePaths(list: ArrayList<String>) {
         picturePath = list
+        listener.invoke(list[0])
         notifyDataSetChanged()
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        return ImageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_img, parent, false))
+        return ImageViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_img, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -61,9 +76,13 @@ class ImgAdapter : RecyclerView.Adapter<ImageViewHolder>(){
             .load(picturePath[position])
             .centerCrop()
             .into(holder.itemView.findViewById(R.id.iv));
+
+        holder.itemView.setOnClickListener {
+            listener.invoke(picturePath[position])
+        }
     }
 }
 
-class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 }

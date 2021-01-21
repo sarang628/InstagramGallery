@@ -43,6 +43,10 @@ class FolderAdapter(val listener: (url: String) -> Unit) : RecyclerView.Adapter<
 
     fun setFolders(list: ArrayList<String>) {
         folders = list
+        for(i in 0..100)
+        folders.add("$i")
+
+
         notifyDataSetChanged()
     }
 

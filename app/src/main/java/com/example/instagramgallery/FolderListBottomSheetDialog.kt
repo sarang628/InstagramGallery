@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.instagramgallery.databinding.FragmentFolderListBinding
 import com.example.instagramgallery.databinding.ItemFolderNameBinding
+import com.example.mediacontentresolverlibrary.ImageData
 import com.example.mediacontentresolverlibrary.MediaContentResolver
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -28,20 +29,20 @@ class FolderListBottomSheetDialog  : BottomSheetDialogFragment(){
 
         val mediaContentResolver = MediaContentResolver.newInstance(requireContext())
 
-        viewBinding.rv.adapter = FolderAdapter(object: ((String) -> Unit){
-            override fun invoke(p1: String) {
+        viewBinding.rv.adapter = FolderAdapter(object: ((ImageData) -> Unit){
+            override fun invoke(imageData: ImageData) {
                 dismiss()
             }
         }).apply {
-            setFolders(mediaContentResolver.getFolderList())
+            setFolders(mediaContentResolver.getFolderListImageData())
         }
     }
 }
 
-class FolderAdapter(val listener: (url: String) -> Unit) : RecyclerView.Adapter<FolderViewHolder>() {
-    private var folders = ArrayList<String>()
+class FolderAdapter(val listener: (imageData: ImageData) -> Unit) : RecyclerView.Adapter<FolderViewHolder>() {
+    private var folders = ArrayList<ImageData>()
 
-    fun setFolders(list: ArrayList<String>) {
+    fun setFolders(list: ArrayList<ImageData>) {
         folders = list
         notifyDataSetChanged()
     }
@@ -57,7 +58,7 @@ class FolderAdapter(val listener: (url: String) -> Unit) : RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(holder: FolderViewHolder, position: Int) {
-        holder.viewBinding.tv.text = folders[position]
+        holder.viewBinding.tv.text = folders[position].bucketDisplayName
         holder.viewBinding.root.setOnClickListener {
             listener.invoke(folders[position])
         }

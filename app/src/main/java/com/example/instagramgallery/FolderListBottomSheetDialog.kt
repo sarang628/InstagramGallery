@@ -13,6 +13,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class FolderListBottomSheetDialog  : BottomSheetDialogFragment(){
     lateinit var viewBinding : FragmentFolderListBinding
+
+    var listener : ((ImageData) -> Unit)? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,6 +34,7 @@ class FolderListBottomSheetDialog  : BottomSheetDialogFragment(){
 
         viewBinding.rv.adapter = FolderAdapter(object: ((ImageData) -> Unit){
             override fun invoke(imageData: ImageData) {
+                listener?.invoke(imageData)
                 dismiss()
             }
         }).apply {

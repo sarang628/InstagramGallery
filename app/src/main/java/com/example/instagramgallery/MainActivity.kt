@@ -6,14 +6,18 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.instagramgallery.databinding.ActivityMainBinding
+import com.example.mediacontentresolverlibrary.ImageData
 import com.example.mediacontentresolverlibrary.MediaContentResolver
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
+lateinit var mediaContentResolver: MediaContentResolver
 
 class MainActivity : AppCompatActivity() {
+    lateinit var imageAdapter: ImgAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -23,11 +27,11 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.b8)
 
-        val mediaContentResolver = MediaContentResolver.newInstance(this)
+        mediaContentResolver = MediaContentResolver.newInstance(this)
 
         mediaContentResolver.requestPermission(this)
 
-        viewBinding.recyclerView2.adapter = ImgAdapter(object : ((String) -> Unit) {
+        imageAdapter = ImgAdapter(object : ((String) -> Unit) {
             override fun invoke(p1: String) {
                 Glide
                     .with(this@MainActivity)
@@ -36,10 +40,16 @@ class MainActivity : AppCompatActivity() {
                     .into(viewBinding.imageView);
             }
         }).apply {
-            setPicturePaths(mediaContentResolver.getPictureList())
+            mediaContentResolver.getPictureList().also {
+                if (it.size > 0)
+                    setPicturePaths(it)
+            }
         }
 
+        viewBinding.recyclerView2.adapter = imageAdapter
 
+
+        // 폴더 클릭
         viewBinding.tv.setOnClickListener {
             FolderListBottomSheetDialog().show(supportFragmentManager, "dialog")
         }
@@ -48,6 +58,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onAttachFragment(fragment: Fragment) {
+        super.onAttachFragment(fragment)
+
+        if (fragment is FolderListBottomSheetDialog) {
+            fragment.listener = object : (ImageData) -> Unit {
+                override fun invoke(p1: ImageData) {
+                    mediaContentResolver.getPictureList(p1.bucketDisplayName).also {
+                        if (it.size > 0)
+                            imageAdapter.setPicturePaths(it)
+                    }
+                }
+            }
+        }
     }
 }
 

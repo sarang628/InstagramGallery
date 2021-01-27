@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.instagramgallery.databinding.ActivityMainBinding
@@ -23,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         val viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
+        val viewModel = ViewModelProviders.of(this).get(GalleryViewModel::class.java)
+
         setSupportActionBar(viewBinding.tb)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.b8)
@@ -31,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         mediaContentResolver.requestPermission(this)
 
-        imageAdapter = ImgAdapter(object : ((String) -> Unit) {
+        imageAdapter = ImgAdapter(viewModel, this, object : ((String) -> Unit) {
             override fun invoke(p1: String) {
                 Glide
                     .with(this@MainActivity)
@@ -76,7 +80,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class ImgAdapter(val listener: (url: String) -> Unit) : RecyclerView.Adapter<ImageViewHolder>() {
+class ImgAdapter(val galleryViewModel: GalleryViewModel, lifecycleOwner: LifecycleOwner, val listener: (url: String) -> Unit) : RecyclerView.Adapter<ImageViewHolder>() {
     var picturePath = ArrayList<String>()
 
     fun setPicturePaths(list: ArrayList<String>) {

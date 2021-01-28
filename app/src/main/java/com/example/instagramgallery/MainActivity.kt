@@ -12,9 +12,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.instagramgallery.databinding.ActivityMainBinding
+import com.example.instagramgallery.databinding.ItemImgBinding
 import com.example.mediacontentresolverlibrary.ImageData
 import com.example.mediacontentresolverlibrary.MediaContentResolver
-import com.google.android.material.bottomsheet.BottomSheetDialog
 
 lateinit var mediaContentResolver: MediaContentResolver
 
@@ -22,12 +22,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var imageAdapter: ImgAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(viewBinding.root)
+        val dataBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(dataBinding.root)
 
         val viewModel = ViewModelProviders.of(this).get(GalleryViewModel::class.java)
 
-        setSupportActionBar(viewBinding.tb)
+        dataBinding.viewModel = viewModel
+        dataBinding.lifecycleOwner = this
+
+        setSupportActionBar(dataBinding.tb)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.b8)
 
@@ -41,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                     .with(this@MainActivity)
                     .load(p1)
                     .centerCrop()
-                    .into(viewBinding.imageView);
+                    .into(dataBinding.imageView);
             }
         }).apply {
             mediaContentResolver.getPictureList().also {
@@ -50,11 +53,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewBinding.recyclerView2.adapter = imageAdapter
+        dataBinding.recyclerView2.adapter = imageAdapter
 
 
         // 폴더 클릭
-        viewBinding.tv.setOnClickListener {
+        dataBinding.tv.setOnClickListener {
             FolderListBottomSheetDialog().show(supportFragmentManager, "dialog")
         }
     }
@@ -80,7 +83,11 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class ImgAdapter(val galleryViewModel: GalleryViewModel, lifecycleOwner: LifecycleOwner, val listener: (url: String) -> Unit) : RecyclerView.Adapter<ImageViewHolder>() {
+class ImgAdapter(
+    private val galleryViewModel: GalleryViewModel,
+    private val lifecycleOwner: LifecycleOwner,
+    private val listener: (url: String) -> Unit
+) : RecyclerView.Adapter<ImageViewHolder>() {
     var picturePath = ArrayList<String>()
 
     fun setPicturePaths(list: ArrayList<String>) {
@@ -91,7 +98,9 @@ class ImgAdapter(val galleryViewModel: GalleryViewModel, lifecycleOwner: Lifecyc
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         return ImageViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_img, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_img, parent, false),
+            galleryViewModel,
+            lifecycleOwner
         )
     }
 
@@ -112,6 +121,13 @@ class ImgAdapter(val galleryViewModel: GalleryViewModel, lifecycleOwner: Lifecyc
     }
 }
 
-class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+class ImageViewHolder(
+    itemView: View,
+    private val galleryViewModel: GalleryViewModel,
+    private val lifecycleOwner: LifecycleOwner
+) : RecyclerView.ViewHolder(itemView) {
+    val itemImgBinding = ItemImgBinding.bind(itemView).apply {
+        viewModel = galleryViewModel
+        lifecycleOwner = this@ImageViewHolder.lifecycleOwner
+    }
 }

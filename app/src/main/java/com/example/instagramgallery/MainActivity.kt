@@ -1,6 +1,7 @@
 package com.example.instagramgallery
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -9,9 +10,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.instagramgallery.StringToImage.toSelectImageList
 import com.example.instagramgallery.databinding.ActivityMainBinding
 import com.example.instagramgallery.databinding.ItemImgBinding
 import com.example.mediacontentresolverlibrary.ImageData
@@ -87,19 +90,32 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+object StringToImage {
+    fun ArrayList<String>.toSelectImageList(): ArrayList<SelectedImage> {
+        val arrayList = ArrayList<SelectedImage>()
+        for (str in this) {
+            arrayList.add(SelectedImage.create(0, str))
+        }
+        return arrayList
+    }
+}
+
 class ImgAdapter(
     private val galleryViewModel: GalleryViewModel,
     private val lifecycleOwner: LifecycleOwner
 ) : RecyclerView.Adapter<ImageViewHolder>() {
     var picturePath = ArrayList<String>()
-
     fun setPicturePaths(list: ArrayList<String>) {
         picturePath = list
         galleryViewModel.selectImage(list[0])
         notifyDataSetChanged()
+        galleryViewModel.setPicturepaths(picturePath)
+
+        //갯수만큼 라이브데이터를 만든다?
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
+        Log.d("__sarang", "onCreateViewHolder")
         return ImageViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_img, parent, false),
             galleryViewModel,
@@ -137,6 +153,6 @@ class ImageViewHolder(
     }
 
     fun binding(position: Int) {
-        itemImgBinding
+        itemImgBinding.selectedImage = galleryViewModel.picturesLiveData[position]
     }
 }

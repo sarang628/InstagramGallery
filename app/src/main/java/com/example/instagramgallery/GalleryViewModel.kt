@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.instagramgallery.StringToImage.toSelectImageList
 import com.example.mediacontentresolverlibrary.ImageData
 import com.example.mediacontentresolverlibrary.MediaContentResolver
 
@@ -13,31 +14,36 @@ class GalleryViewModel(val mediaContentResolver: MediaContentResolver) : ViewMod
         value = false
     }
     val isMultiSelect: LiveData<Boolean> = _isMultiSelect
-
     private val _currentSelectedImage = MutableLiveData<String>()
+    private val selectedPictures = ArrayList<SelectedImage>()
     val currentSelectedImage: LiveData<String> = _currentSelectedImage
-
+    var picturesLiveData = ArrayList<SelectedImage>()
 
     fun selectImage(path: String) {
         _currentSelectedImage.value = path
+        for (data in picturesLiveData) {
+            data.index.postValue(data.index.value?.plus(1))
+        }
     }
 
-
-    private val selectedPictures = ArrayList<SelectedImage>()
 
     fun clickMultiSelect() {
         _isMultiSelect.value = !_isMultiSelect.value!!
     }
 
-    fun selectPicture(imageData: ImageData) {
-        selectedPictures.add(SelectedImage.create(selectedPictures.size, imageData))
+    fun selectPicture(path: String) {
+        selectedPictures.add(SelectedImage.create(selectedPictures.size, path))
+    }
+
+    fun setPicturepaths(picturePath: java.util.ArrayList<String>) {
+        picturesLiveData = ArrayList(picturePath.toSelectImageList())
     }
 }
 
-data class SelectedImage(val index: MutableLiveData<Int>, val path: MutableLiveData<ImageData>) {
+data class SelectedImage(val index: MutableLiveData<Int>, val path: MutableLiveData<String>) {
     companion object {
-        fun create(index: Int, imageData: ImageData): SelectedImage {
-            return SelectedImage(MutableLiveData(index), MutableLiveData(imageData))
+        fun create(index: Int, path: String): SelectedImage {
+            return SelectedImage(MutableLiveData(index), MutableLiveData(path))
         }
     }
 }

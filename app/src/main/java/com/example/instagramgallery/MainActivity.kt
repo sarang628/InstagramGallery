@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.instagramgallery.databinding.ActivityMainBinding
@@ -20,12 +21,15 @@ lateinit var mediaContentResolver: MediaContentResolver
 
 class MainActivity : AppCompatActivity() {
     lateinit var imageAdapter: ImgAdapter
+
+    val viewModel: GalleryViewModel by viewModels {
+        GalleryViewModelFactory(applicationContext)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val dataBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(dataBinding.root)
-
-        val viewModel = ViewModelProviders.of(this).get(GalleryViewModel::class.java)
 
         dataBinding.viewModel = viewModel
         dataBinding.lifecycleOwner = this
@@ -38,15 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         mediaContentResolver.requestPermission(this)
 
-        imageAdapter = ImgAdapter(viewModel, this, object : ((String) -> Unit) {
-            override fun invoke(p1: String) {
-                Glide
-                    .with(this@MainActivity)
-                    .load(p1)
-                    .centerCrop()
-                    .into(dataBinding.imageView);
-            }
-        }).apply {
+        imageAdapter = ImgAdapter(viewModel, this).apply {
             mediaContentResolver.getPictureList().also {
                 if (it.size > 0)
                     setPicturePaths(it)
@@ -60,6 +56,14 @@ class MainActivity : AppCompatActivity() {
         dataBinding.tv.setOnClickListener {
             FolderListBottomSheetDialog().show(supportFragmentManager, "dialog")
         }
+
+        viewModel.currentSelectedImage.observe(this, Observer {
+            Glide
+                .with(this@MainActivity)
+                .load(it)
+                .centerCrop()
+                .into(dataBinding.imageView);
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -85,14 +89,13 @@ class MainActivity : AppCompatActivity() {
 
 class ImgAdapter(
     private val galleryViewModel: GalleryViewModel,
-    private val lifecycleOwner: LifecycleOwner,
-    private val listener: (url: String) -> Unit
+    private val lifecycleOwner: LifecycleOwner
 ) : RecyclerView.Adapter<ImageViewHolder>() {
     var picturePath = ArrayList<String>()
 
     fun setPicturePaths(list: ArrayList<String>) {
         picturePath = list
-        listener.invoke(list[0])
+        galleryViewModel.selectImage(list[0])
         notifyDataSetChanged()
     }
 
@@ -116,8 +119,10 @@ class ImgAdapter(
             .into(holder.itemView.findViewById(R.id.iv));
 
         holder.itemView.setOnClickListener {
-            listener.invoke(picturePath[position])
+            galleryViewModel.selectImage(picturePath[position])
         }
+
+        holder.binding(position)
     }
 }
 
@@ -129,5 +134,9 @@ class ImageViewHolder(
     val itemImgBinding = ItemImgBinding.bind(itemView).apply {
         viewModel = galleryViewModel
         lifecycleOwner = this@ImageViewHolder.lifecycleOwner
+    }
+
+    fun binding(position: Int) {
+        itemImgBinding
     }
 }

@@ -7,6 +7,10 @@
             name="viewModel"
             type="com.example.instagramgallery.GalleryViewModel" />
 
+        <variable
+            name="selectedImage"
+            type="com.example.instagramgallery.SelectedImage" />
+
         <import type="android.view.View" />
     </data>
 
@@ -33,6 +37,7 @@
             android:background="@drawable/shape_select_picture_circle_bg"
             android:gravity="center"
             android:textColor="#FFFFFF"
+            android:text="@{selectedImage.index.toString()}"
             android:visibility="@{viewModel.isMultiSelect ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="@+id/iv"
             app:layout_constraintTop_toTopOf="parent" />

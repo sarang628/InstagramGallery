@@ -115,7 +115,6 @@ class ImgAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        Log.d("__sarang", "onCreateViewHolder")
         return ImageViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_img, parent, false),
             galleryViewModel,
@@ -147,7 +146,7 @@ class ImageViewHolder(
     private val galleryViewModel: GalleryViewModel,
     private val lifecycleOwner: LifecycleOwner
 ) : RecyclerView.ViewHolder(itemView) {
-    val itemImgBinding = ItemImgBinding.bind(itemView).apply {
+    private val itemImgBinding = ItemImgBinding.bind(itemView).apply {
         viewModel = galleryViewModel
         lifecycleOwner = this@ImageViewHolder.lifecycleOwner
     }

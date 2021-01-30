@@ -37,6 +37,7 @@
             android:background="@drawable/shape_select_picture_circle_bg"
             android:gravity="center"
             android:textColor="#FFFFFF"
+            app:select="@{selectedImage.index > 0}"
             android:text="@{selectedImage.index.toString()}"
             android:visibility="@{viewModel.isMultiSelect ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="@+id/iv"

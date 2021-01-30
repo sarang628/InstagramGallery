@@ -1,6 +1,9 @@
 package com.example.instagramgallery
 
 import android.content.Context
+import android.util.Log
+import android.view.View
+import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,24 +18,49 @@ class GalleryViewModel(val mediaContentResolver: MediaContentResolver) : ViewMod
     }
     val isMultiSelect: LiveData<Boolean> = _isMultiSelect
     private val _currentSelectedImage = MutableLiveData<String>()
-    private val selectedPictures = ArrayList<SelectedImage>()
+
+    /** 여러 사진을 올릴 때 저장하는 리스트*/
+    private val selectedPictures = ArrayList<String>()
     val currentSelectedImage: LiveData<String> = _currentSelectedImage
     var picturesLiveData = ArrayList<SelectedImage>()
 
     fun selectImage(path: String) {
         _currentSelectedImage.value = path
+
+        if (!selectedPictures.contains(path)) {
+            Log.d("__sarang", "add $path")
+            selectedPictures.add(path)
+        } else {
+            Log.d("__sarang", "rem $path")
+            selectedPictures.remove(path)
+        }
+        refreshSelectList()
+    }
+
+    private fun refreshSelectList() {
         for (data in picturesLiveData) {
-            data.index.postValue(data.index.value?.plus(1))
+            data.index.value = 0
+        }
+
+        for (i in 0 until selectedPictures.size) {
+            val path = selectedPictures[i]
+            for (data in picturesLiveData) {
+                if (data.path.value.equals(path)) {
+                    data.index.postValue(i + 1)
+                    continue
+                }
+            }
         }
     }
 
 
     fun clickMultiSelect() {
         _isMultiSelect.value = !_isMultiSelect.value!!
+        refreshSelectList()
     }
 
     fun selectPicture(path: String) {
-        selectedPictures.add(SelectedImage.create(selectedPictures.size, path))
+        //selectedPictures.add(SelectedImage.create(selectedPictures.size, path))
     }
 
     fun setPicturepaths(picturePath: java.util.ArrayList<String>) {
@@ -54,4 +82,12 @@ class GalleryViewModelFactory(val context: Context) : ViewModelProvider.Factory 
         return GalleryViewModel(mediaContentResolver) as T
     }
 
+}
+
+object DataBindingAdapterUtil {
+    @JvmStatic
+    @BindingAdapter("app:select")
+    fun select(view: View, b: Boolean) {
+        view.isSelected = b
+    }
 }

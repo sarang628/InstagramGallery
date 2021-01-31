@@ -1,4 +1,4 @@
-package com.example.instagramgallery
+package com.sarang.instagralleryModule
 
 import android.content.Context
 import android.util.Log
@@ -8,9 +8,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.instagramgallery.StringToImage.toSelectImageList
-import com.example.mediacontentresolverlibrary.ImageData
 import com.example.mediacontentresolverlibrary.MediaContentResolver
+import com.sarang.instagralleryModule.StringToImage.toSelectImageList
 
 class GalleryViewModel(val mediaContentResolver: MediaContentResolver) : ViewModel() {
     private val _isMultiSelect = MutableLiveData<Boolean>().apply {
@@ -20,7 +19,7 @@ class GalleryViewModel(val mediaContentResolver: MediaContentResolver) : ViewMod
     private val _currentSelectedImage = MutableLiveData<String>()
 
     /** 여러 사진을 올릴 때 저장하는 리스트*/
-    private val selectedPictures = ArrayList<String>()
+    val selectedPictures = ArrayList<String>()
     val currentSelectedImage: LiveData<String> = _currentSelectedImage
     var picturesLiveData = ArrayList<SelectedImage>()
 
@@ -36,6 +35,7 @@ class GalleryViewModel(val mediaContentResolver: MediaContentResolver) : ViewMod
         }
         refreshSelectList()
     }
+
 
     private fun refreshSelectList() {
         for (data in picturesLiveData) {

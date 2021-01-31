@@ -1,3 +1,4 @@
+include ':InstagramGalleryModule'
 include ':app'
 rootProject.name = "InstagramGallery"
 

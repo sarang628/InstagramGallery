@@ -1,15 +1,15 @@
-package com.example.instagramgallery
+package com.sarang.instagralleryModule
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.instagramgallery.databinding.FragmentFolderListBinding
-import com.example.instagramgallery.databinding.ItemFolderNameBinding
 import com.example.mediacontentresolverlibrary.ImageData
 import com.example.mediacontentresolverlibrary.MediaContentResolver
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.sarang.instagralleryModule.databinding.FragmentFolderListBinding
+import com.sarang.instagralleryModule.databinding.ItemFolderNameBinding
 
 class FolderListBottomSheetDialog  : BottomSheetDialogFragment(){
     lateinit var viewBinding : FragmentFolderListBinding

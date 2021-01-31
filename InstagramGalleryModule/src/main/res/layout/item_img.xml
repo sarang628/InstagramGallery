@@ -5,11 +5,11 @@
 
         <variable
             name="viewModel"
-            type="com.example.instagramgallery.GalleryViewModel" />
+            type="com.sarang.instagralleryModule.GalleryViewModel" />
 
         <variable
             name="selectedImage"
-            type="com.example.instagramgallery.SelectedImage" />
+            type="com.sarang.instagralleryModule.SelectedImage" />
 
         <import type="android.view.View" />
     </data>
@@ -36,12 +36,12 @@
             android:layout_marginRight="13dp"
             android:background="@drawable/shape_select_picture_circle_bg"
             android:gravity="center"
+            android:text='@{selectedImage.index == 0 ? "":selectedImage.index.toString()}'
             android:textColor="#FFFFFF"
-            app:select="@{selectedImage.index > 0}"
-            android:text="@{selectedImage.index.toString()}"
             android:visibility="@{viewModel.isMultiSelect ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="@+id/iv"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:select="@{selectedImage.index > 0}" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

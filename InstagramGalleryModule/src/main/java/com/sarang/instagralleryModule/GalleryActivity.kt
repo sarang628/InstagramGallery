@@ -1,5 +1,7 @@
 package com.sarang.instagralleryModule
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -85,6 +87,10 @@ class GalleryActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         Log.d("__sarang", "onOptionsItemSelected ${viewModel.selectedPictures}")
+
+        setResult(Activity.RESULT_OK, Intent().apply { putExtra("pictures", viewModel.selectedPictures) })
+
+        finish()
 
         return super.onOptionsItemSelected(item)
     }

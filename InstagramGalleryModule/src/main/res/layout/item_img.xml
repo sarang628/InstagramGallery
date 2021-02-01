@@ -12,6 +12,8 @@
             type="com.sarang.instagralleryModule.SelectedImage" />
 
         <import type="android.view.View" />
+
+        <import type="android.graphics.Color" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,6 +26,7 @@
             android:id="@+id/iv"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:foreground='@{viewModel.currentSelectedImage.equals(selectedImage.path)? Color.parseColor("#BBFFFFFF") : Color.parseColor("#00FFFFFF")}'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

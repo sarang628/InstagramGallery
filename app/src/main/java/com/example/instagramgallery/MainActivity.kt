@@ -1,5 +1,6 @@
 package com.example.instagramgallery
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -16,13 +17,25 @@ import com.sarang.instagralleryModule.*
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var dataBinding : ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val dataBinding = ActivityMainBinding.inflate(layoutInflater)
+        dataBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(dataBinding.root)
 
         dataBinding.btnGallery.setOnClickListener {
-            startActivity(Intent(this, GalleryActivity::class.java))
+            startActivityForResult(Intent(this, GalleryActivity::class.java), 1)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 1 && resultCode == Activity.RESULT_OK)
+        data?.also {
+            it.getStringArrayListExtra("pictures")?.also {
+                dataBinding.tvPictures.text = it.toString()
+            }
         }
     }
 }

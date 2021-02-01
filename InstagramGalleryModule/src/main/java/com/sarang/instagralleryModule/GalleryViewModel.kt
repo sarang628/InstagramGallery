@@ -24,9 +24,15 @@ class GalleryViewModel(val mediaContentResolver: MediaContentResolver) : ViewMod
     var picturesLiveData = ArrayList<SelectedImage>()
 
     fun selectImage(path: String) {
-        _currentSelectedImage.value = path
+        _currentSelectedImage.postValue(path)
 
-        if (!selectedPictures.contains(path)) {
+        if (_isMultiSelect.value == false) {
+            if (selectedPictures.isNullOrEmpty()) {
+                selectedPictures.add(0, path)
+            } else {
+                selectedPictures[0] = path
+            }
+        } else if (!selectedPictures.contains(path)) {
             Log.d("__sarang", "add $path")
             selectedPictures.add(path)
         } else {
@@ -56,6 +62,12 @@ class GalleryViewModel(val mediaContentResolver: MediaContentResolver) : ViewMod
 
     fun clickMultiSelect() {
         _isMultiSelect.value = !_isMultiSelect.value!!
+
+        if (_isMultiSelect.value == false) {
+            selectedPictures.removeAll(selectedPictures)
+            selectedPictures.add(currentSelectedImage.value!!)
+        }
+
         refreshSelectList()
     }
 

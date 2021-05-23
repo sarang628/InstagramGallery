@@ -3,4 +3,4 @@ include ':app'
 rootProject.name = "InstagramGallery"
 
 include ':MediaContentProvider'
-project(':MediaContentProvider').projectDir = new File("/Users/sarangyang/AndroidStudioProjects/MediaContentResolver/MediaContentResolverLibrary")
+project(':MediaContentProvider').projectDir = new File("../MediaContentResolver/MediaContentResolverLibrary")

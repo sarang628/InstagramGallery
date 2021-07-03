@@ -71,10 +71,6 @@ class GalleryViewModel(val mediaContentResolver: MediaContentResolver) : ViewMod
         refreshSelectList()
     }
 
-    fun selectPicture(path: String) {
-        //selectedPictures.add(SelectedImage.create(selectedPictures.size, path))
-    }
-
     fun setPicturepaths(picturePath: java.util.ArrayList<String>) {
         picturesLiveData = ArrayList(picturePath.toSelectImageList())
     }
@@ -98,7 +94,7 @@ class GalleryViewModelFactory(val context: Context) : ViewModelProvider.Factory 
 
 object DataBindingAdapterUtil {
     @JvmStatic
-    @BindingAdapter("app:select")
+    @BindingAdapter("select")
     fun select(view: View, b: Boolean) {
         view.isSelected = b
     }

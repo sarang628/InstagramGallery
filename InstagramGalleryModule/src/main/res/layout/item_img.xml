@@ -44,7 +44,7 @@
             android:visibility="@{viewModel.isMultiSelect ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="@+id/iv"
             app:layout_constraintTop_toTopOf="parent"
-            app:select="@{selectedImage.index > 0}" />
+            select="@{selectedImage.index > 0}" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

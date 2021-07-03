@@ -24,9 +24,18 @@ class MainActivity : AppCompatActivity() {
         dataBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(dataBinding.root)
 
-        dataBinding.btnGallery.setOnClickListener {
-            startActivityForResult(Intent(this, GalleryActivity::class.java), 1)
+        val contract = registerForActivityResult(InstagramGalleryContract()){
+            Log.d("_sryang", "registerForActivityResult");
+            it?.getStringArrayListExtra("pictures")?.also {
+                dataBinding.tvPictures.text = it.toString()
+            }
         }
+
+        dataBinding.btnGallery.setOnClickListener {
+            //startActivityForResult(Intent(this, GalleryActivity::class.java), 1)
+            contract.launch("a")
+        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

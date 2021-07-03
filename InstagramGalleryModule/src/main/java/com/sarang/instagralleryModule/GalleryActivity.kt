@@ -73,9 +73,9 @@ class GalleryActivity : AppCompatActivity() {
         super.onAttachFragment(fragment)
 
         if (fragment is FolderListBottomSheetDialog) {
-            fragment.listener = object : (ImageData) -> Unit {
-                override fun invoke(p1: ImageData) {
-                    mediaContentResolver.getPictureList(p1.bucketDisplayName).also {
+            fragment.listener = object : (String) -> Unit {
+                override fun invoke(p1: String) {
+                    mediaContentResolver.getPictureList(p1).also {
                         if (it.size > 0)
                             imageAdapter.setPicturePaths(it)
                     }
@@ -88,7 +88,9 @@ class GalleryActivity : AppCompatActivity() {
 
         Log.d("__sarang", "onOptionsItemSelected ${viewModel.selectedPictures}")
 
-        setResult(Activity.RESULT_OK, Intent().apply { putExtra("pictures", viewModel.selectedPictures) })
+        setResult(Activity.RESULT_OK, Intent().apply {
+            putExtra("pictures", viewModel.selectedPictures)
+        })
 
         finish()
 

@@ -11,10 +11,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.sarang.instagralleryModule.databinding.FragmentFolderListBinding
 import com.sarang.instagralleryModule.databinding.ItemFolderNameBinding
 
-class FolderListBottomSheetDialog  : BottomSheetDialogFragment(){
-    lateinit var viewBinding : FragmentFolderListBinding
+class FolderListBottomSheetDialog : BottomSheetDialogFragment() {
+    lateinit var viewBinding: FragmentFolderListBinding
 
-    var listener : ((ImageData) -> Unit)? = null
+    var listener: ((String) -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,8 +32,8 @@ class FolderListBottomSheetDialog  : BottomSheetDialogFragment(){
 
         val mediaContentResolver = MediaContentResolver.newInstance(requireContext())
 
-        viewBinding.rv.adapter = FolderAdapter(object: ((ImageData) -> Unit){
-            override fun invoke(imageData: ImageData) {
+        viewBinding.rv.adapter = FolderAdapter(object : ((String) -> Unit) {
+            override fun invoke(imageData: String) {
                 listener?.invoke(imageData)
                 dismiss()
             }
@@ -43,10 +43,22 @@ class FolderListBottomSheetDialog  : BottomSheetDialogFragment(){
     }
 }
 
-class FolderAdapter(val listener: (imageData: ImageData) -> Unit) : RecyclerView.Adapter<FolderViewHolder>() {
+class FolderAdapter(val listener: (imageData: String) -> Unit) :
+    RecyclerView.Adapter<FolderViewHolder>() {
     private var folders = ArrayList<ImageData>()
 
+    private var folderMap = HashMap<String, ImageData>()
+    private var folterList = ArrayList<String>()
+
     fun setFolders(list: ArrayList<ImageData>) {
+        for (imageData in list) {
+            folderMap.put(imageData.data, imageData)
+        }
+        val itr = folderMap.keys.iterator()
+        while (itr.hasNext()) {
+            folterList.add(itr.next())
+        }
+
         folders = list
         notifyDataSetChanged()
     }
@@ -58,13 +70,13 @@ class FolderAdapter(val listener: (imageData: ImageData) -> Unit) : RecyclerView
     }
 
     override fun getItemCount(): Int {
-        return folders.size
+        return folderMap.size
     }
 
     override fun onBindViewHolder(holder: FolderViewHolder, position: Int) {
-        holder.viewBinding.tv.text = folders[position].bucketDisplayName
+        holder.viewBinding.tv.text = folterList[position]
         holder.viewBinding.root.setOnClickListener {
-            listener.invoke(folders[position])
+            listener.invoke(folterList[position])
         }
     }
 }

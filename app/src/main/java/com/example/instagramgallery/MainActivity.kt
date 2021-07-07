@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
             //startActivityForResult(Intent(this, GalleryActivity::class.java), 1)
             contract.launch("a")
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -38,28 +38,17 @@ class FolderListBottomSheetDialog : BottomSheetDialogFragment() {
                 dismiss()
             }
         }).apply {
-            setFolders(mediaContentResolver.getFolderListImageData())
+            setFolders(mediaContentResolver.getFolderList())
         }
     }
 }
 
 class FolderAdapter(val listener: (imageData: String) -> Unit) :
     RecyclerView.Adapter<FolderViewHolder>() {
-    private var folders = ArrayList<ImageData>()
-
-    private var folderMap = HashMap<String, ImageData>()
     private var folterList = ArrayList<String>()
 
-    fun setFolders(list: ArrayList<ImageData>) {
-        for (imageData in list) {
-            folderMap.put(imageData.data, imageData)
-        }
-        val itr = folderMap.keys.iterator()
-        while (itr.hasNext()) {
-            folterList.add(itr.next())
-        }
-
-        folders = list
+    fun setFolders(list: ArrayList<String>) {
+        folterList = list
         notifyDataSetChanged()
     }
 
@@ -70,7 +59,7 @@ class FolderAdapter(val listener: (imageData: String) -> Unit) :
     }
 
     override fun getItemCount(): Int {
-        return folderMap.size
+        return folterList.size
     }
 
     override fun onBindViewHolder(holder: FolderViewHolder, position: Int) {

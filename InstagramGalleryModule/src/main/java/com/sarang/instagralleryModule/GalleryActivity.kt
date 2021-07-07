@@ -38,6 +38,9 @@ class GalleryActivity : AppCompatActivity() {
 
         mediaContentResolver = MediaContentResolver.newInstance(this)
 
+        mediaContentResolver.printAvailableMediaColunm()
+        mediaContentResolver.printAvailableMediaColunmWithContents()
+
         mediaContentResolver.requestPermission(this)
 
         imageAdapter = ImgAdapter(viewModel, this).apply {
@@ -76,8 +79,9 @@ class GalleryActivity : AppCompatActivity() {
             fragment.listener = object : (String) -> Unit {
                 override fun invoke(p1: String) {
                     mediaContentResolver.getPictureList(p1).also {
-                        if (it.size > 0)
+                        if (it.size > 0) {
                             imageAdapter.setPicturePaths(it)
+                        }
                     }
                 }
             }

@@ -84,14 +84,6 @@ data class SelectedImage(val index: MutableLiveData<Int>, val path: MutableLiveD
     }
 }
 
-class GalleryViewModelFactory(val context: Context) : ViewModelProvider.Factory {
-    val mediaContentResolver = MediaContentResolver.newInstance(context)
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return GalleryViewModel(mediaContentResolver) as T
-    }
-
-}
-
 object DataBindingAdapterUtil {
     @JvmStatic
     @BindingAdapter("select")

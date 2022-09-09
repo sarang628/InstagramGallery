@@ -2,16 +2,14 @@ package com.sarang.instagralleryModule
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
-import com.example.mediacontentresolverlibrary.ImageData
 import com.example.mediacontentresolverlibrary.MediaContentResolver
 import com.sarang.instagralleryModule.databinding.ActivityGalleryBinding
 
@@ -20,21 +18,13 @@ class GalleryActivity : AppCompatActivity() {
 
     lateinit var imageAdapter: ImgAdapter
 
-    val viewModel: GalleryViewModel by viewModels {
-        GalleryViewModelFactory(applicationContext)
-    }
+    lateinit var viewModel: GalleryViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val dataBinding = ActivityGalleryBinding.inflate(layoutInflater)
         setContentView(dataBinding.root)
-
-        dataBinding.viewModel = viewModel
-        dataBinding.lifecycleOwner = this
-
-        setSupportActionBar(dataBinding.tb)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.b8)
 
         mediaContentResolver = MediaContentResolver.newInstance(this)
 
@@ -42,6 +32,15 @@ class GalleryActivity : AppCompatActivity() {
         mediaContentResolver.printAvailableMediaColunmWithContents()
 
         mediaContentResolver.requestPermission(this)
+
+        viewModel = GalleryViewModel(mediaContentResolver)
+
+        dataBinding.viewModel = viewModel
+        dataBinding.lifecycleOwner = this
+
+        setSupportActionBar(dataBinding.tb)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.b8)
 
         imageAdapter = ImgAdapter(viewModel, this).apply {
             mediaContentResolver.getPictureList().also {

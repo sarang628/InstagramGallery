@@ -35,7 +35,7 @@ android {
 
 dependencies {
 
-    implementation 'com.github.sarang628:MediaContentResolver:599c89fd44'
+    implementation "com.github.sarang628:MediaContentResolver:$mediaContentResolverVersion"
 
     implementation "androidx.core:core-ktx:$rootProject.ktxVersion"
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"

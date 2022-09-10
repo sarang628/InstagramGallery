@@ -45,6 +45,7 @@ ext {
     hiltViewModelVersion = '1.0.0-alpha01'
     recyclerViewVersion = '1.2.1'
     facebookLibraryVersion = '8.1.0'
+    mediaContentResolverVersion = 'c158f47e56'
 }
 
 buildscript {

@@ -2,6 +2,7 @@ package com.sarang.instagralleryModule
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,9 +31,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.mediacontentresolverlibrary.MediaContentResolver
 
-@Preview
 @Composable
-fun GalleryScreen() {
+fun GalleryScreen(color: Long) {
     val mediaContentResolver: MediaContentResolver =
         MediaContentResolver.newInstance(LocalContext.current)
 
@@ -41,7 +41,7 @@ fun GalleryScreen() {
     val state = rememberLazyGridState()
 
     Log.d("GalleryScreen", list.toString())
-    Column {
+    Column(Modifier.background(Color(color))) {
         //title
         Row(
             modifier = Modifier

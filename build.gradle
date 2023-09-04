@@ -1,94 +1,28 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    id 'com.android.application' version '8.1.0' apply false
+    id 'com.android.library' version '8.1.0' apply false
+    id 'org.jetbrains.kotlin.android' version '1.8.20' apply false
+    id 'com.google.dagger.hilt.android' version '2.44' apply false
+}
+
 ext {
     // Sdk and tools
-    compileSdkVersion = 31
-    minSdkVersion = 23
-    targetSdkVersion = 30
+    compileSdk = 33
+    minSdk = 24
+    targetSdk = 30
     buildToolsVersion = '30.0.3'
 
-    // App dependencies
-    workVersion = '2.1.0'
-    // App dependencies
-    coroutinesVersion = "1.4.2"
-    hiltVersion = '2.33-beta'
-    // App dependencies
-    coroutinesVersion = "1.4.2"
-    hiltViewModelVersion = '1.0.0-alpha03'
+    //hilt
+    hiltVersion = '2.44'
+
+    //navigation
     navigationVersion = '2.4.0-alpha06'
-    okhttpLoggingVersion = '4.7.2'
-    pagingVersion = '3.0.0-alpha02'
-    retrofitVersion = '2.9.0'
-    roomVersion = '2.2.5'
-    runnerVersion = '1.0.1'
-    truthVersion = '0.42'
-    testExtJunit = '1.1.0'
-    uiAutomatorVersion = '2.2.0'
-    viewPagerVersion = '1.0.0'
-    ktxVersion = '1.0.2'
-    materialVersion = '1.4.0-rc01'
-    ktxVersion = '1.6.0'
-    appCompatVersion = '1.3.0'
-    junitVersion = '4.13.2'
-    junitTestVersion = '1.1.3'
-    espressoCoreVersion = '3.3.0'
-    fragmentVersion = '1.3.5'
-    roomVersion = '2.3.0'
-    kotlinVersion = '1.4.30'
-    kotlin_version = '1.5.20'
-    coroutinesVersion = "1.3.0-M2"
-    lifecycleVersion = '2.2.0'
-    archLifecycleVersion = '2.3.1'
-    glideVersion = '4.11.0'
-    constraintLayoutVersion = '2.1.0'
-    espressoVersion = '3.4.0'
-    swipeRefreshLayoutVersion = '1.1.0'
-    hiltVersion = '2.37'
-    hiltViewModelVersion = '1.0.0-alpha01'
-    recyclerViewVersion = '1.2.1'
-    facebookLibraryVersion = '8.1.0'
-    mediaContentResolverVersion = 'c158f47e56'
+
+    torangImageLoaderVersion = 'f4a2359698'
+    themeVersion = '7c191eb4e6'
+    navigationModuleVersion = 'd98f57435d'
+    repositoryVersion = '8d4bef8640'
+    baseFeedVersion = 'aa5b46f3e0'
+    mediaContentResolverVersion = '54ff69ee3a'
 }
-
-buildscript {
-    ext.kotlinVersion = '1.5.10'
-    ext.navigationVersion = '2.4.1'
-    ext.ktlintVersion = '0.33.0'
-    ext.hiltVersion = '2.40.1'
-    repositories {
-        google()
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31'
-        classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
-
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
-        //maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
-//    /** HILT */
-//    implementation "com.google.dagger:hilt-android:$hiltVersion"
-//    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
-//    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewModelVersion"
-//    kapt "androidx.hilt:hilt-compiler:$hiltViewModelVersion"
-//    annotationProcessor "androidx.hilt:hilt-compiler:$hiltViewModelVersion"
-//    id 'kotlin-kapt'
-//    id 'dagger.hilt.android.plugin'
-

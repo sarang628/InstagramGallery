@@ -39,5 +39,4 @@ class InstagramGalleryContract : ActivityResultContract<String?, Intent?>() {
         Log.d("__sarang", ""+resultCode)
         return if (intent == null || resultCode != Activity.RESULT_OK) null else intent
     }
-
 }

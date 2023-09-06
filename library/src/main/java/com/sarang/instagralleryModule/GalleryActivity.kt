@@ -20,7 +20,9 @@ class GalleryActivity : ComponentActivity() {
 
         setContent {
             Column {
-                GalleryScreen(0xFF000000)
+                GalleryScreen(0xFF000000, onNext = {
+
+                }, onClose = {})
             }
         }
     }

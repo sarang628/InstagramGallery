@@ -70,4 +70,6 @@ dependencies {
     /** local */
     implementation "com.github.sarang628:Theme:$themeVersion"
     implementation("io.coil-kt:coil-compose:2.4.0")
+
+    implementation "com.github.sarang628:ComposePermissionTest:$composePermissionVersion"
 }

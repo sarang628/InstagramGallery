@@ -25,4 +25,6 @@ ext {
     repositoryVersion = '8d4bef8640'
     baseFeedVersion = 'aa5b46f3e0'
     mediaContentResolverVersion = '54ff69ee3a'
+    composePermissionVersion = '194f47a9e7'
+
 }

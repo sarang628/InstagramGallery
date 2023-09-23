@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import com.example.mediacontentresolverlibrary.MediaContentResolver
+import com.sarang.instagralleryModule.gallery.GalleryScreen
 
 class GalleryActivity : ComponentActivity() {
     private lateinit var mediaContentResolver: MediaContentResolver

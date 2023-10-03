@@ -67,9 +67,12 @@ fun GalleryScreen(
             //titlebar
             GalleryTitleBar(
                 onNext = {
-                    onNext.invoke(if (isMutipleSelected) selectedList else ArrayList(selectedList))
+                    onNext.invoke(if (isMutipleSelected) selectedList else ArrayList<String>().apply {
+                        add(selectedImage)
+                    })
                 },
-                onClose = onClose
+                onClose = onClose,
+                isAvailableNext = selectedImage.isNotEmpty()
             )
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -114,8 +117,6 @@ fun GalleryScreen(
                 list = mediaContentResolver.getPictureList(it)
                 isExpand = false
             }
-
-        //ComposeRequestPermission(permission = Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 }
 

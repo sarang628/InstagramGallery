@@ -23,7 +23,8 @@ import com.sarang.instagralleryModule.R
 @Composable
 fun GalleryTitleBar(
     onNext: (Void?) -> Unit,
-    onClose: (Void?) -> Unit
+    onClose: (Void?) -> Unit,
+    isAvailableNext: Boolean = false
 ) {
     Row(
         modifier = Modifier
@@ -46,10 +47,9 @@ fun GalleryTitleBar(
         Text(text = "New post", fontWeight = FontWeight.Bold, fontSize = 18.sp)
         Row(Modifier.fillMaxWidth(), Arrangement.End) {
             Text(text = "Next",
-                color = Color(0xFF4193EF),
-                modifier = Modifier.clickable {
-                    onNext.invoke(null)
-                }
+                color = Color(if (isAvailableNext) 0xFF4193EF else 0xFFAAAAAA),
+                modifier =
+                Modifier.clickable(isAvailableNext) { onNext.invoke(null) }
             )
         }
     }

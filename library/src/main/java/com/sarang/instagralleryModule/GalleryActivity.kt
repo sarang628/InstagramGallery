@@ -1,6 +1,8 @@
 package com.sarang.instagralleryModule
 
+import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -27,4 +29,12 @@ class GalleryActivity : ComponentActivity() {
             }
         }
     }
+}
+
+fun ComponentActivity.instagramGallery() {
+    val contract = registerForActivityResult(InstagramGalleryContract()) {
+        Log.d("_sryang", "registerForActivityResult");
+    }
+
+    contract.launch("")
 }

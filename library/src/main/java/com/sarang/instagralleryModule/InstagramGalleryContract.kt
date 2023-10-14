@@ -8,20 +8,6 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.CallSuper
 
-/**
- * An [ActivityResultContract] to prompt the user to pick a piece of content, receiving
- * a `content://` [Uri] for that content that allows you to use
- * [android.content.ContentResolver.openInputStream] to access the raw data. By
- * default, this adds [Intent.CATEGORY_OPENABLE] to only return content that can be
- * represented as a stream.
- *
- *
- * The input is the mime type to filter by, e.g. `image/ *`.
- *
- *
- * This can be extended to override [.createIntent] if you wish to pass additional
- * extras to the Intent created by `super.createIntent()`.
- */
 class InstagramGalleryContract : ActivityResultContract<String?, Intent?>() {
     @CallSuper
     override fun createIntent(context: Context, input: String?): Intent {

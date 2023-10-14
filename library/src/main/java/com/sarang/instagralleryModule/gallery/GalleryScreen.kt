@@ -48,7 +48,7 @@ import com.sarang.instagralleryModule.R
 
 @Composable
 fun GalleryScreen(
-    color: Long,
+    color: Long = 0xFFFFFFFF,
     onNext: (List<String>) -> Unit,
     onClose: (Void?) -> Unit
 ) {
@@ -72,7 +72,7 @@ fun GalleryScreen(
                     })
                 },
                 onClose = onClose,
-                isAvailableNext = selectedImage.isNotEmpty()
+                isAvailableNext = if (isMutipleSelected) !selectedList.isEmpty() else selectedImage.isNotEmpty()
             )
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)

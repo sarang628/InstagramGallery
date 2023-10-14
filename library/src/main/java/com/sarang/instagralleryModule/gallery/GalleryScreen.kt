@@ -1,5 +1,6 @@
 package com.sarang.instagralleryModule.gallery
 
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -22,12 +23,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +48,9 @@ import coil.request.ImageRequest
 import com.example.mediacontentresolverlibrary.MediaContentResolver
 import com.sarang.instagralleryModule.FolderListBottomSheetDialog
 import com.sarang.instagralleryModule.R
+import id.zelory.compressor.Compressor
+import kotlinx.coroutines.launch
+import java.io.File
 
 @Composable
 fun GalleryScreen(
@@ -54,22 +60,30 @@ fun GalleryScreen(
 ) {
     val mediaContentResolver: MediaContentResolver =
         MediaContentResolver.newInstance(LocalContext.current)
-
+    var isProgress by remember { mutableStateOf(false) }
     var list by remember { mutableStateOf(mediaContentResolver.getPictureList()) }
     var selectedImage by remember { mutableStateOf("") }
     var isExpand by remember { mutableStateOf(false) }
     var selectedFolder by remember { mutableStateOf("Recent") }
     val selectedList = remember { mutableStateListOf<String>() }
     var isMutipleSelected by remember { mutableStateOf(false) }
+    val coroutine = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Box {
         Column(Modifier.background(Color(color))) {
             //titlebar
             GalleryTitleBar(
                 onNext = {
-                    onNext.invoke(if (isMutipleSelected) selectedList else ArrayList<String>().apply {
-                        add(selectedImage)
-                    })
+                    coroutine.launch {
+                        isProgress = true
+                        val compressedImage =
+                            compress(if (isMutipleSelected) selectedList else ArrayList<String>().apply {
+                                add(selectedImage)
+                            }, context = context)
+                        onNext.invoke(compressedImage)
+                        isProgress = false
+                    }
                 },
                 onClose = onClose,
                 isAvailableNext = if (isMutipleSelected) !selectedList.isEmpty() else selectedImage.isNotEmpty()
@@ -117,6 +131,16 @@ fun GalleryScreen(
                 list = mediaContentResolver.getPictureList(it)
                 isExpand = false
             }
+
+        if (isProgress)
+            Column(
+                Modifier.align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator()
+                Text(text = "compressing..")
+            }
+
     }
 }
 
@@ -129,4 +153,14 @@ fun PreviewGalleryScreen() {
     }, onClose = {
 
     })
+}
+
+suspend fun compress(file: List<String>, context: Context): ArrayList<String> {
+    val list = ArrayList<String>()
+    file.forEach() {
+        list.add(
+            Compressor.compress(context = context, imageFile = File(it)).path
+        )
+    }
+    return list
 }

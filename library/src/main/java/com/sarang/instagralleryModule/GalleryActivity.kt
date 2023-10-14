@@ -1,6 +1,5 @@
 package com.sarang.instagralleryModule
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -24,7 +23,6 @@ class GalleryActivity : ComponentActivity() {
         setContent {
             Column {
                 GalleryScreen(0xFF000000, onNext = {
-
                 }, onClose = {})
             }
         }

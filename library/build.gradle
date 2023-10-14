@@ -70,6 +70,7 @@ dependencies {
     /** local */
     implementation "com.github.sarang628:Theme:$themeVersion"
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation 'id.zelory:compressor:3.0.1'
 
     implementation "com.github.sarang628:ComposePermissionTest:$composePermissionVersion"
 }

@@ -7,7 +7,7 @@
         android:maxSdkVersion="28" />
 
     <application>
-        <activity android:name=".GalleryActivity"></activity>
+        <activity android:name=".GalleryActivity" />
     </application>
 
 </manifest>

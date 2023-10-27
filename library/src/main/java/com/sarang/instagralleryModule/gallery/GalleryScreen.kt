@@ -163,12 +163,12 @@ fun GalleryScreen(
 ) {
     val navController = rememberNavController()
     val request = rememberPermissionState(
-        permission = Manifest.permission.READ_EXTERNAL_STORAGE,
-        onPermissionResult = { navController.go("gallery") })
+        permission = Manifest.permission.READ_EXTERNAL_STORAGE
+    )
     Column {
         NavHost(
-            navController = navController, startDestination =
-            if (request.status.isGranted) "gallery" else "askPermission",
+            navController = navController,
+            startDestination = if (request.status.isGranted) "gallery" else "askPermission",
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = Color(color))

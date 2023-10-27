@@ -18,6 +18,7 @@ ext {
 
     //navigation
     navigationVersion = '2.4.0-alpha06'
+    nav_version = '2.5.3'
 
     torangImageLoaderVersion = 'f4a2359698'
     themeVersion = '7c191eb4e6'

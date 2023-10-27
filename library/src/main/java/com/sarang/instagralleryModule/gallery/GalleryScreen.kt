@@ -35,6 +35,7 @@ import com.example.mediacontentresolverlibrary.MediaContentResolver
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.sarang.instagralleryModule.FolderListBottomSheetDialog
 import com.sarang.instagralleryModule.go
 import id.zelory.compressor.Compressor
@@ -168,7 +169,12 @@ fun GalleryScreen(
     Column {
         NavHost(
             navController = navController,
-            startDestination = if (request.status.isGranted) "gallery" else "askPermission",
+            startDestination =
+            if (request.status.shouldShowRationale)
+                "shouldShowRationale"
+            else if (request.status.isGranted)
+                "gallery"
+            else "askPermission",
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = Color(color))
@@ -178,6 +184,11 @@ fun GalleryScreen(
             }
             composable("askPermission") {
                 AskPermission { request.launchPermissionRequest() }
+            }
+            composable("shouldShowRationale") {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Text(text = "권한을 거부하였습니다. 설정화면에서 권한을 추가해주세요.", Modifier.align(Alignment.Center))
+                }
             }
         }
     }

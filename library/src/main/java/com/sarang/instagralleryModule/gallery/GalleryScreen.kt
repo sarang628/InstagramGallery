@@ -171,7 +171,7 @@ fun GalleryScreen(
             if (request.status.isGranted) "gallery" else "askPermission",
             modifier = Modifier
                 .fillMaxSize()
-            //.background(color)
+                .background(color = Color(color))
         ) {
             composable("gallery") {
                 _GalleryScreen(onNext = onNext, onClose = onClose, color = color)

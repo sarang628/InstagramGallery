@@ -24,31 +24,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
-            val request = rememberPermissionState(
-                permission = Manifest.permission.READ_EXTERNAL_STORAGE,
-                onPermissionResult = { navController.go("gallery") })
-            Column {
-                NavHost(
-                    navController = navController, startDestination =
-                    if (request.status.isGranted) "gallery" else "askPermission",
-                    modifier = Modifier
-                        .fillMaxSize()
-                    //.background(color)
-                ) {
-                    composable("gallery") {
-                        GalleryScreen(onNext = {
-                            //selected images
-                            Log.d("MainActivity", TextUtils.join(",", it))
-                        }, onClose = {
+            GalleryScreen(onNext = {
+                //selected images
+                Log.d("MainActivity", TextUtils.join(",", it))
+            }, onClose = {
 
-                        })
-                    }
-                    composable("askPermission") {
-                        AskPermission { request.launchPermissionRequest() }
-                    }
-                }
-            }
+            }, color = 0XFFEEAAFF)
         }
     }
 }

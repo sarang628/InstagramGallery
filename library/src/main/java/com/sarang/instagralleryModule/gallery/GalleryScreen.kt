@@ -164,7 +164,7 @@ fun GalleryScreen(
 ) {
     val navController = rememberNavController()
     val request = rememberPermissionState(
-        permission = Manifest.permission.READ_EXTERNAL_STORAGE
+        permission = Manifest.permission.READ_MEDIA_IMAGES
     )
     Column {
         NavHost(

@@ -22,8 +22,8 @@ import com.sarang.instagralleryModule.R
 
 @Composable
 fun GalleryTitleBar(
-    onNext: (Void?) -> Unit,
-    onClose: (Void?) -> Unit,
+    onNext: () -> Unit,
+    onClose: () -> Unit,
     isAvailableNext: Boolean = false
 ) {
     Row(
@@ -40,7 +40,7 @@ fun GalleryTitleBar(
             modifier = Modifier
                 .height(30.dp)
                 .clickable {
-                    onClose.invoke(null)
+                    onClose.invoke()
                 }
         )
         Spacer(modifier = Modifier.width(20.dp))
@@ -49,7 +49,7 @@ fun GalleryTitleBar(
             Text(text = "Next",
                 color = Color(if (isAvailableNext) 0xFF4193EF else 0xFFAAAAAA),
                 modifier =
-                Modifier.clickable(isAvailableNext) { onNext.invoke(null) }
+                Modifier.clickable(isAvailableNext) { onNext.invoke() }
             )
         }
     }

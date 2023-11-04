@@ -18,7 +18,7 @@ class GalleryActivity : ComponentActivity() {
         val list = mediaContentResolver.getPictureList()
         setContent {
             Column {
-                GalleryScreen(0xFF000000, onNext = {
+                GalleryScreen(onNext = {
                 }, onClose = {})
             }
         }

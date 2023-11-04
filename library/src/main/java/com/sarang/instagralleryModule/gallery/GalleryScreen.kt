@@ -2,10 +2,8 @@ package com.sarang.instagralleryModule.gallery
 
 import android.Manifest
 import android.content.Context
-import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +20,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,16 +34,14 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.sarang.instagralleryModule.FolderListBottomSheetDialog
-import com.sarang.instagralleryModule.go
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.launch
 import java.io.File
 
 @Composable
 private fun _GalleryScreen(
-    color: Long = 0xFFFFFFFF,
     onNext: (List<String>) -> Unit,
-    onClose: (Void?) -> Unit
+    onClose: () -> Unit
 ) {
     val mediaContentResolver: MediaContentResolver =
         MediaContentResolver.newInstance(LocalContext.current)
@@ -61,7 +56,7 @@ private fun _GalleryScreen(
     val context = LocalContext.current
 
     Box {
-        Column(Modifier.background(Color(color))) {
+        Column {
             //titlebar
             GalleryTitleBar(
                 onNext = {
@@ -115,12 +110,16 @@ private fun _GalleryScreen(
                     }
                 })
         }
-        if (isExpand)
-            FolderListBottomSheetDialog(isExpand) {
+        FolderListBottomSheetDialog(isExpand,
+            onSelect = {
                 selectedFolder = it
                 list = mediaContentResolver.getPictureList(it)
                 isExpand = false
+            },
+            onDismissRequest = {
+                isExpand = false
             }
+        )
 
         if (isProgress)
             Column(
@@ -138,7 +137,7 @@ private fun _GalleryScreen(
 @Composable
 fun PreviewGalleryScreen() {
     val context = LocalContext.current
-    GalleryScreen(color = 0xFFFFFFFF, onNext = {
+    GalleryScreen(onNext = {
         Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
     }, onClose = {
 
@@ -158,9 +157,8 @@ suspend fun compress(file: List<String>, context: Context): ArrayList<String> {
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun GalleryScreen(
-    color: Long = 0xFFFFFFFF,
     onNext: (List<String>) -> Unit,
-    onClose: (Void?) -> Unit
+    onClose: () -> Unit
 ) {
     val navController = rememberNavController()
     val request = rememberPermissionState(
@@ -177,10 +175,9 @@ fun GalleryScreen(
             else "askPermission",
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color(color))
         ) {
             composable("gallery") {
-                _GalleryScreen(onNext = onNext, onClose = onClose, color = color)
+                _GalleryScreen(onNext = onNext, onClose = onClose)
             }
             composable("askPermission") {
                 AskPermission { request.launchPermissionRequest() }

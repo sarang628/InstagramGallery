@@ -1,12 +1,7 @@
-package com.sarang.instagralleryModule.gallery
+package com.sarang.instagralleryModule.compose
 
-import android.Manifest
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.CircularProgressIndicator
@@ -23,33 +18,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.mediacontentresolverlibrary.MediaContentResolver
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
-import com.sarang.instagralleryModule.FolderListBottomSheetDialog
-import id.zelory.compressor.Compressor
+import com.sarang.instagralleryModule.util.compress
+import com.sarang.instagralleryModule.viewmodel.GalleryViewModel
 import kotlinx.coroutines.launch
-import java.io.File
 
 @Composable
-private fun _GalleryScreen(
-    onNext: (List<String>) -> Unit,
-    onClose: () -> Unit
+internal fun GalleryScreen(
+    onNext: (List<String>) -> Unit,     // 다음 클릭
+    onClose: () -> Unit,                // 닫기 클릭
+    list: List<String>,                 // 이미지 리스트
+    onSelectFolder: (String) -> Unit,   // 폴더 선택 클릭
+    selectedFolder: String,             // 선택 된 폴더명
+    isExpand: Boolean,                  // 폴더 리스트 다이얼로그 표시 여부
+    onFoler: () -> Unit,                // 폴더 리스트 다이얼로그 클릭
+    onDismissRequest: () -> Unit,       // 폴더 리스트 다이얼로그 닫기 이벤트
+    folderList: List<String>            // 폴더 리스트
 ) {
-    val mediaContentResolver: MediaContentResolver =
-        MediaContentResolver.newInstance(LocalContext.current)
     var isProgress by remember { mutableStateOf(false) }
-    var list by remember { mutableStateOf(mediaContentResolver.getPictureList()) }
     var selectedImage by remember { mutableStateOf("") }
-    var isExpand by remember { mutableStateOf(false) }
-    var selectedFolder by remember { mutableStateOf("Recent") }
     val selectedList = remember { mutableStateListOf<String>() }
     var isMutipleSelected by remember { mutableStateOf(false) }
     val coroutine = rememberCoroutineScope()
@@ -87,10 +76,7 @@ private fun _GalleryScreen(
             GalleryMiddleBar(
                 folder = selectedFolder,
                 isMutipleSelected = isMutipleSelected,
-                onFolder = {
-                    Log.d("GalleryScreen", "!!!!!!")
-                    isExpand = !isExpand
-                },
+                onFolder = onFoler,
                 onSelectMutiple = {
                     isMutipleSelected = !isMutipleSelected
                 }
@@ -110,15 +96,11 @@ private fun _GalleryScreen(
                     }
                 })
         }
-        FolderListBottomSheetDialog(isExpand,
-            onSelect = {
-                selectedFolder = it
-                list = mediaContentResolver.getPictureList(it)
-                isExpand = false
-            },
-            onDismissRequest = {
-                isExpand = false
-            }
+        FolderListBottomSheetDialog(
+            isExpand,
+            onSelect = onSelectFolder,
+            onDismissRequest = onDismissRequest,
+            list = folderList
         )
 
         if (isProgress)
@@ -136,57 +118,24 @@ private fun _GalleryScreen(
 @Preview
 @Composable
 fun PreviewGalleryScreen() {
-    val context = LocalContext.current
-    GalleryScreen(onNext = {
-        Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-    }, onClose = {
-
-    })
-}
-
-suspend fun compress(file: List<String>, context: Context): ArrayList<String> {
-    val list = ArrayList<String>()
-    file.forEach() {
-        list.add(
-            Compressor.compress(context = context, imageFile = File(it)).path
-        )
-    }
-    return list
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun GalleryScreen(
-    onNext: (List<String>) -> Unit,
-    onClose: () -> Unit
-) {
-    val navController = rememberNavController()
-    val request = rememberPermissionState(
-        permission = Manifest.permission.READ_MEDIA_IMAGES
+    GalleryScreen(onNext = {}, onClose = {}, list = ArrayList<String>().apply {
+        add("")
+        add("")
+        add("")
+        add("")
+        add("")
+        add("")
+        add("")
+        add("")
+        add("")
+        add("")
+        add("")
+    },
+        isExpand = false,
+        onFoler = {},
+        onSelectFolder = {},
+        selectedFolder = "Selected Folder",
+        onDismissRequest = {},
+        folderList = ArrayList()
     )
-    Column {
-        NavHost(
-            navController = navController,
-            startDestination =
-            if (request.status.shouldShowRationale)
-                "shouldShowRationale"
-            else if (request.status.isGranted)
-                "gallery"
-            else "askPermission",
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            composable("gallery") {
-                _GalleryScreen(onNext = onNext, onClose = onClose)
-            }
-            composable("askPermission") {
-                AskPermission { request.launchPermissionRequest() }
-            }
-            composable("shouldShowRationale") {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Text(text = "권한을 거부하였습니다. 설정화면에서 권한을 추가해주세요.", Modifier.align(Alignment.Center))
-                }
-            }
-        }
-    }
 }

@@ -1,4 +1,4 @@
-package com.sarang.instagralleryModule
+package com.sarang.instagralleryModule.activity
 
 import android.app.Activity
 import android.content.Context

@@ -11,8 +11,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.google.samples.apps.sunflower.ui.TorangTheme
-import com.sarang.instagralleryModule.gallery.GalleryScreen
+import com.sarang.instagralleryModule.GalleryNavHost
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +25,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                 ) {
-                    GalleryScreen(onNext = {
+                    GalleryNavHost(onNext = {
                         //selected images
                         Log.d("MainActivity", TextUtils.join(",", it))
                     }, onClose = {

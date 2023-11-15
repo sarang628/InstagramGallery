@@ -1,4 +1,4 @@
-package com.sarang.instagralleryModule
+package com.sarang.instagralleryModule.activity
 
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.example.mediacontentresolverlibrary.MediaContentResolver
-import com.sarang.instagralleryModule.gallery.GalleryScreen
+import com.sarang.instagralleryModule.GalleryNavHost
 
 class GalleryActivity : ComponentActivity() {
     private lateinit var mediaContentResolver: MediaContentResolver
@@ -18,7 +18,7 @@ class GalleryActivity : ComponentActivity() {
         val list = mediaContentResolver.getPictureList()
         setContent {
             Column {
-                GalleryScreen(onNext = {
+                GalleryNavHost(onNext = {
                 }, onClose = {})
             }
         }

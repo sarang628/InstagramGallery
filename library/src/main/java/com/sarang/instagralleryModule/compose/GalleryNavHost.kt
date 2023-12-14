@@ -32,7 +32,8 @@ import com.sarang.instagralleryModule.viewmodel.GalleryViewModel
 fun GalleryNavHost(
     viewModel: GalleryViewModel = hiltViewModel(),
     onNext: (List<String>) -> Unit,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    maxCount: Int = 10
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val navController = rememberNavController()
@@ -72,7 +73,8 @@ fun GalleryNavHost(
                     onFoler = { viewModel.openFoldersDialog() },
                     isExpand = uiState.isExpand,
                     onDismissRequest = { viewModel.closeFoldersDialog() },
-                    folderList = uiState.folderList
+                    folderList = uiState.folderList,
+                    maxCount = maxCount
                 )
             }
             composable("askPermission") {

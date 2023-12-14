@@ -35,7 +35,8 @@ internal fun GalleryScreen(
     isExpand: Boolean,                  // 폴더 리스트 다이얼로그 표시 여부
     onFoler: () -> Unit,                // 폴더 리스트 다이얼로그 클릭
     onDismissRequest: () -> Unit,       // 폴더 리스트 다이얼로그 닫기 이벤트
-    folderList: List<String>            // 폴더 리스트
+    folderList: List<String>,            // 폴더 리스트
+    maxCount : Int = 10
 ) {
     var isProgress by remember { mutableStateOf(false) }
     var selectedImage by remember { mutableStateOf("") }
@@ -89,7 +90,8 @@ internal fun GalleryScreen(
 
                     if (isMutipleSelected) {
                         if (!selectedList.contains(it)) {
-                            selectedList.add(it)
+                            if (selectedList.size < maxCount)
+                                selectedList.add(it)
                         } else {
                             selectedList.remove(it)
                         }

@@ -1,4 +1,4 @@
-package com.example.instagramgallery.di
+package com.example.instagramgallery.di.gallery
 
 import android.content.Context
 import com.example.mediacontentresolverlibrary.MediaContentResolver

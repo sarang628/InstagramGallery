@@ -65,9 +65,7 @@ private fun AskPermission(onClick: () -> Unit, onBack: () -> Unit) {
             ) {
                 Text(text = "갤러리를 이용하기위해선 이미지 사용권한이 필요합니다.")
                 Spacer(modifier = Modifier.height(10.dp))
-                Button(onClick = {
-
-                }) {
+                Button(onClick = onClick) {
                     Text(text = "권한요청하기")
                 }
             }

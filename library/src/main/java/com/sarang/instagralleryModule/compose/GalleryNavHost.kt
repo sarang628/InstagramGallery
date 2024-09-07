@@ -1,7 +1,9 @@
 package com.sarang.instagralleryModule
 
 import android.Manifest
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,13 +29,14 @@ import com.sarang.instagralleryModule.compose.AskPermission
 import com.sarang.instagralleryModule.compose.GalleryScreen
 import com.sarang.instagralleryModule.viewmodel.GalleryViewModel
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun GalleryNavHost(
     viewModel: GalleryViewModel = hiltViewModel(),
     onNext: (List<String>) -> Unit,
     onClose: () -> Unit,
-    maxCount: Int = 10
+    maxCount: Int = 10,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val navController = rememberNavController()
@@ -78,7 +81,9 @@ fun GalleryNavHost(
                 )
             }
             composable("askPermission") {
-                AskPermission()
+                AskPermission {
+
+                }
             }
             composable("shouldShowRationale") {
                 Box(modifier = Modifier.fillMaxSize()) {

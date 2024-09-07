@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +30,7 @@ import com.sarang.instagralleryModule.R
 fun GalleryTitleBar(
     onNext: () -> Unit,                 // next 클릭
     onClose: () -> Unit,                // 닫기 클릭
-    isAvailableNext: Boolean = false    // next 활성화 여부
+    isAvailableNext: Boolean = false,    // next 활성화 여부
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Row(
@@ -38,19 +40,14 @@ fun GalleryTitleBar(
             .padding(start = 8.dp, end = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter =
-            painterResource(id = R.drawable.ic_close),
-            contentDescription = "",
-            modifier = Modifier
-                .height(30.dp)
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null
-                ) {
-                    onClose.invoke()
-                }
-        )
+        IconButton(onClick = onClose) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_close),
+                contentDescription = "",
+                modifier = Modifier
+                    .height(30.dp)
+            )
+        }
         Spacer(modifier = Modifier.width(20.dp))
         Text(text = "New post", fontWeight = FontWeight.Bold, fontSize = 18.sp)
         Row(Modifier.fillMaxWidth(), Arrangement.End) {

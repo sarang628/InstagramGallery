@@ -37,6 +37,7 @@ fun GalleryNavHost(
     onNext: (List<String>) -> Unit,
     onClose: () -> Unit,
     maxCount: Int = 10,
+    onBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val navController = rememberNavController()
@@ -81,9 +82,7 @@ fun GalleryNavHost(
                 )
             }
             composable("askPermission") {
-                AskPermission {
-
-                }
+                AskPermission(onBack = onBack)
             }
             composable("shouldShowRationale") {
                 Box(modifier = Modifier.fillMaxSize()) {

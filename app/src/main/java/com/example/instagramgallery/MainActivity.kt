@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                         Log.d("MainActivity", TextUtils.join(",", it))
                     }, onClose = {
 
-                    })
+                    }, onBack = {})
                 }
             }
         }

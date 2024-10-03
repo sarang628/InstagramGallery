@@ -8,7 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import com.example.mediacontentresolverlibrary.MediaContentResolver
-import com.sarang.instagralleryModule.GalleryNavHost
+import com.sarang.instagralleryModule.compose.GalleryNavHost
 
 class GalleryActivity : ComponentActivity() {
     private lateinit var mediaContentResolver: MediaContentResolver

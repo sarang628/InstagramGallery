@@ -28,7 +28,7 @@ import com.sarang.instagralleryModule.util.compress
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun GalleryScreen(
+internal fun GalleryListWithPreviewScreen(
     onNext: (List<String>) -> Unit,     // 다음 클릭
     onClose: () -> Unit,                // 닫기 클릭
     list: List<String>,                 // 이미지 리스트
@@ -122,7 +122,7 @@ internal fun GalleryScreen(
 @Preview
 @Composable
 fun PreviewGalleryScreen() {
-    GalleryScreen(onNext = {}, onClose = {}, list = ArrayList<String>().apply {
+    GalleryListWithPreviewScreen(onNext = {}, onClose = {}, list = ArrayList<String>().apply {
         add("")
         add("")
         add("")

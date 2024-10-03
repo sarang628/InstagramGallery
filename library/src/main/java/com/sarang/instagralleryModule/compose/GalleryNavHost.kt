@@ -1,4 +1,4 @@
-package com.sarang.instagralleryModule
+package com.sarang.instagralleryModule.compose
 
 import android.Manifest
 import android.content.Intent
@@ -21,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -39,8 +38,6 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.sarang.instagralleryModule.compose.component.AskPermission
-import com.sarang.instagralleryModule.compose.GalleryScreen
-import com.sarang.instagralleryModule.compose.component.GalleryListScreen
 import com.sarang.instagralleryModule.viewmodel.GalleryUiState
 import com.sarang.instagralleryModule.viewmodel.GalleryViewModel
 
@@ -121,7 +118,7 @@ private fun GalleryNavHost(
         ) {
             composable("gallery") {
                 if (galleryType == 0) {
-                    GalleryScreen(
+                    GalleryListWithPreviewScreen(
                         onNext = onNext,
                         onClose = onClose,
                         list = uiState.list,

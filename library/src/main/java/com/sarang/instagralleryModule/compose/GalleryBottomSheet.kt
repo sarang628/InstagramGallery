@@ -46,7 +46,7 @@ fun GalleryBottomSheet(
         imageSelectCompose: @Composable () -> Unit,
         content: @Composable (PaddingValues) -> Unit,
     ) -> Unit,
-    onSend: () -> Unit,
+    onSend: (List<String>) -> Unit,
     onBack: () -> Unit,
 ) {
     var selectedList: List<String> by remember { mutableStateOf(listOf()) }
@@ -78,7 +78,7 @@ fun GalleryBottomSheet(
                 modifier = Modifier
                     .align(Alignment.BottomStart),
                 selectedList = selectedList,
-                onSend = onSend
+                onSend = { onSend.invoke(selectedList) }
             )
     }
 }

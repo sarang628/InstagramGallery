@@ -37,6 +37,9 @@ import coil.compose.AsyncImage
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun GalleryBottomSheet(
+    show: Boolean,
+    onHidden: () -> Unit,
+    content: @Composable (PaddingValues) -> Unit,
     imageSelectBottomSheetScaffold: @Composable (
         show: Boolean,
         onHidden: () -> Unit,
@@ -44,36 +47,30 @@ fun GalleryBottomSheet(
         content: @Composable (PaddingValues) -> Unit,
     ) -> Unit,
     onSend: () -> Unit,
+    onBack: () -> Unit,
 ) {
-    var show by remember { mutableStateOf(false) }
     var selectedList: List<String> by remember { mutableStateOf(listOf()) }
     Box(modifier = Modifier.fillMaxSize())
     {
         imageSelectBottomSheetScaffold.invoke(
             show = show,
             onHidden = {
-                show = false
                 selectedList = listOf()
+                onHidden.invoke()
             },
             imageSelectCompose = {
                 if (show)
-                    GalleryNavHost(onNext = {
-                        //selected images
-                        Log.d("MainActivity", TextUtils.join(",", it))
-                    }, onClose = {
-
-                    }, onBack = {},
+                    GalleryNavHost(
+                        onNext = {},
+                        onClose = {},
+                        onBack = onBack,
                         galleryType = 1,
                         onSelectedList = {
                             selectedList = it
                         }
                     )
             },
-            content = {
-                Button(onClick = { show = true }) {
-                    Text(text = "show")
-                }
-            },
+            content = content,
         )
 
         if (selectedList.isNotEmpty())

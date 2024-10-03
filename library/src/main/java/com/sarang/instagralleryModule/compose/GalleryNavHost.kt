@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,8 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,9 +21,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,8 +54,10 @@ fun GalleryNavHost(
     maxCount: Int = 10,
     onBack: () -> Unit,
     galleryType: Int = 0,
+    onSelectedList: (List<String>) -> Unit = {},
 ) {
     val uiState = viewModel.uiState
+
     GalleryNavHost(
         uiState = uiState,
         onNext = onNext,
@@ -72,7 +71,8 @@ fun GalleryNavHost(
         onFoler = { viewModel.openFoldersDialog() },
         onDismissRequest = { viewModel.closeFoldersDialog() },
         permissionState = rememberPermissionState(permission = Manifest.permission.READ_MEDIA_IMAGES),
-        galleryType = galleryType
+        galleryType = galleryType,
+        onSelectedList = onSelectedList
     )
 }
 
@@ -91,6 +91,7 @@ private fun GalleryNavHost(
     onDismissRequest: () -> Unit,       // 폴더 리스트 다이얼로그 닫기 이벤트,
     permissionState: PermissionState,
     galleryType: Int = 0,
+    onSelectedList: (List<String>) -> Unit = {},
 ) {
     val navController = rememberNavController()
     var isPermission by remember { mutableStateOf(true) }
@@ -134,8 +135,6 @@ private fun GalleryNavHost(
                     )
                 } else {
                     GalleryListScreen(
-                        onNext = onNext,
-                        onClose = onClose,
                         list = uiState.list,
                         onSelectFolder = onSelectFolder,
                         selectedFolder = uiState.selectedFolder,
@@ -143,7 +142,8 @@ private fun GalleryNavHost(
                         isExpand = uiState.isExpand,
                         onDismissRequest = onDismissRequest,
                         folderList = uiState.folderList,
-                        maxCount = maxCount
+                        maxCount = maxCount,
+                        onSelectedList = onSelectedList
                     )
                 }
             }
@@ -209,7 +209,7 @@ fun PreviewGalleryNavHost() {
             override val permission: String
                 get() = ""
             override val status: PermissionStatus
-                get() = PermissionStatus.Denied(shouldShowRationale = true)
+                get() = PermissionStatus.Granted
 
             override fun launchPermissionRequest() {
 

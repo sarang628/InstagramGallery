@@ -1,4 +1,4 @@
-package com.sarang.instagralleryModule.compose
+package com.sarang.instagralleryModule.compose.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -25,11 +25,9 @@ import androidx.compose.ui.unit.sp
 import com.sarang.instagralleryModule.R
 
 @Composable
-fun GalleryMiddleBar(
+fun GalleryMiddleBar1(
     folder: String,                 // 폴더명
     onFolder: () -> Unit,           // 폴더 클릭
-    isMutipleSelected: Boolean,     // 다중 선택 여부
-    onSelectMutiple: () -> Unit,    // 다중 선택 클릭
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Row(
@@ -37,7 +35,8 @@ fun GalleryMiddleBar(
             .height(50.dp)
             .fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
         Row(
             Modifier
@@ -55,27 +54,13 @@ fun GalleryMiddleBar(
             )
             Image(painter = painterResource(id = R.drawable.yg), contentDescription = "")
         }
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
-        ) {
-            SelectMutipleButton(
-                onSelect = onSelectMutiple,
-                isSelect = isMutipleSelected
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            CameraButton()
-        }
     }
 }
 
 @Preview
 @Composable
-fun PreviewGalleryMiddleBar() {
-    GalleryMiddleBar(
+fun PreviewGalleryMiddleBar1() {
+    GalleryMiddleBar1(
         folder = "Folder",
-        onFolder = {},
-        isMutipleSelected = false,
-        onSelectMutiple = {})
+        onFolder = {})
 }

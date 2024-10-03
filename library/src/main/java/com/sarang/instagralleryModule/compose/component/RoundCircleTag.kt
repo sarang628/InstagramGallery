@@ -1,4 +1,4 @@
-package com.sarang.instagralleryModule.compose
+package com.sarang.instagralleryModule.compose.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

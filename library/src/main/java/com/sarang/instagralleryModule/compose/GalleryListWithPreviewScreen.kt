@@ -18,11 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.sarang.instagralleryModule.compose.component.FolderListBottomSheetDialog
+import com.sarang.instagralleryModule.compose.component.GalleryGridView
+import com.sarang.instagralleryModule.compose.component.GalleryMiddleBar
+import com.sarang.instagralleryModule.compose.component.GalleryTitleBar
 import com.sarang.instagralleryModule.util.compress
-import com.sarang.instagralleryModule.viewmodel.GalleryViewModel
 import kotlinx.coroutines.launch
 
 @Composable

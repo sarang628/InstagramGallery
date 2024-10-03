@@ -1,4 +1,4 @@
-package com.sarang.instagralleryModule.compose
+package com.sarang.instagralleryModule.compose.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

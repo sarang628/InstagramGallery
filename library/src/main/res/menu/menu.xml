@@ -2,9 +2,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:icon="@drawable/b25"
-        android:iconTint="#0000FF"
-        app:showAsAction="always" />
-
 </menu>

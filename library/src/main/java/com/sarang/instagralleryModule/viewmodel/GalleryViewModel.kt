@@ -1,13 +1,12 @@
 package com.sarang.instagralleryModule.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.mediacontentresolverlibrary.MediaContentResolver
+import com.sarang.instagralleryModule.usecase.GetFolderListUseCase
+import com.sarang.instagralleryModule.usecase.GetPictureListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 
@@ -19,22 +18,24 @@ data class GalleryUiState(
 )
 
 @HiltViewModel
-class GalleryViewModel @Inject constructor(val mediaContentResolver: MediaContentResolver) :
+class GalleryViewModel @Inject constructor(
+    val getPictureListUseCase: GetPictureListUseCase,
+    val getFolderListUseCase: GetFolderListUseCase
+) :
     ViewModel() {
 
     var uiState by mutableStateOf(GalleryUiState())
         private set
 
     init {
-        reLoad()
+        reload()
     }
 
     // 이미지 폴더 리스트 가져오기
-    fun reLoad() {
-        Log.d("_GalleryViewModel", "reLoad")
+    fun reload() {
         uiState = uiState.copy(
-            list = mediaContentResolver.getPictureList(),
-            folderList = mediaContentResolver.getFolderList()
+            list = getPictureListUseCase.invoke(),
+            folderList = getFolderListUseCase.invoke()
         )
     }
 
@@ -52,7 +53,7 @@ class GalleryViewModel @Inject constructor(val mediaContentResolver: MediaConten
     fun updateFolder(folder: String) {
         uiState = uiState.copy(
             selectedFolder = folder,
-            list = mediaContentResolver.getPictureList(folder)
+            list = getPictureListUseCase.invoke(folder)
         )
     }
 }

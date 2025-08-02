@@ -31,58 +31,72 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
-import com.google.accompanist.permissions.PermissionStatus
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import com.sarang.instagralleryModule.compose.component.AskPermission
 import com.sarang.instagralleryModule.viewmodel.GalleryUiState
 import com.sarang.instagralleryModule.viewmodel.GalleryViewModel
 
-@OptIn(ExperimentalPermissionsApi::class)
+/**
+ * @param viewModel 갤러리 뷰모델
+ * @param onNext 다음
+ * @param onClose 닫기
+ * @param maxCount 사진 최대 갯수
+ * @param onBack 뒤로가기
+ * @param galleryType 갤러리 종류
+ * @param onSelectedList 선택한 파일 리스트
+ */
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun GalleryNavHost(viewModel: GalleryViewModel = hiltViewModel(), onNext: (List<String>) -> Unit, onClose: () -> Unit = {}, maxCount: Int = 10, onBack: () -> Unit = {}, galleryType: Int = 0, onSelectedList: (List<String>) -> Unit = {}, ) {
+fun GalleryNavHost(viewModel: GalleryViewModel = hiltViewModel(), onNext: (List<String>) -> Unit = {}, onClose: () -> Unit = {}, maxCount: Int = 10, onBack: () -> Unit = {}, galleryType: Int = 0, onSelectedList: (List<String>) -> Unit = {}, isGranted: Boolean = false, shouldShowRationale : Boolean = false,) {
     GalleryNavHost(uiState = viewModel.uiState, onNext = onNext, onClose = onClose, onBack = onBack, galleryType = galleryType, onSelectedList = onSelectedList,
-        onReLoad = { viewModel.reLoad() },
+        onReload = { viewModel.reload() },
         onSelectFolder = { viewModel.updateFolder(it);viewModel.closeFoldersDialog() },
-        onFoler = { viewModel.openFoldersDialog() },
+        onFolder = { viewModel.openFoldersDialog() },
         onDismissRequest = { viewModel.closeFoldersDialog() },
-        permissionState = rememberPermissionState(permission = Manifest.permission.READ_MEDIA_IMAGES)
+        isGranted = isGranted,
+        shouldShowRationale = shouldShowRationale
     )
 }
 
+/**
+ * @param uiState uiState
+ * @param onNext 다음
+ * @param onClose 닫기
+ * @param maxCount 최대 개수
+ * @param onBack 뒤로 가기
+ * @param onReload 갱신
+ * @param onSelectFolder 폴더 선택
+ * @param onFolder 폴더 선택
+ * @param onDismissRequest 다이얼로그 닫기
+ * @param permissionState 권한 상태
+ * @param onSelectedList 파일 리스트 선택
+ */
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun GalleryNavHost(uiState: GalleryUiState, onNext: (List<String>) -> Unit = {}, onClose: () -> Unit = {}, maxCount: Int = 10, onBack: () -> Unit = {}, onReLoad: () -> Unit = {}, onSelectFolder: (String) -> Unit = {}, onFoler: () -> Unit = {}, onDismissRequest: () -> Unit = {}, permissionState: PermissionState, galleryType: Int = 0, onSelectedList: (List<String>) -> Unit = {}, ) {
+private fun GalleryNavHost(uiState: GalleryUiState, onNext: (List<String>) -> Unit = {}, onClose: () -> Unit = {}, maxCount: Int = 10, onBack: () -> Unit = {}, onReload: () -> Unit = {}, onSelectFolder: (String) -> Unit = {}, onFolder: () -> Unit = {}, onDismissRequest: () -> Unit = {}, isGranted: Boolean = false, shouldShowRationale : Boolean = false, galleryType: Int = 0, onSelectedList: (List<String>) -> Unit = {}, ) {
     val navController = rememberNavController()
     var isPermission by remember { mutableStateOf(true) }
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = permissionState.status.isGranted, block = {
-        //권한 승인 후 사진 폴더 리스트 다시 가져오기
-        if (!permissionState.status.isGranted) { isPermission = false }
-        if (permissionState.status.isGranted && !isPermission) { onReLoad.invoke() }
+    LaunchedEffect(key1 = isGranted, block = { //권한 승인 후 사진 폴더 리스트 다시 가져오기
+        if (!isGranted) { isPermission = false }
+        if (isGranted && !isPermission) { onReload.invoke() }
     })
 
     Column {
         NavHost(
             navController = navController,
-            startDestination = if (permissionState.status.shouldShowRationale) "shouldShowRationale" else if (permissionState.status.isGranted) "gallery" else "askPermission",
+            startDestination = if (shouldShowRationale) "shouldShowRationale" else if (isGranted) "gallery" else "askPermission",
             modifier = Modifier.fillMaxSize()
         ) {
             composable("gallery") {
                 if (galleryType == 0) {
-                    GalleryListWithPreviewScreen(onNext = onNext, onClose = onClose, list = uiState.list, onSelectFolder = onSelectFolder, selectedFolder = uiState.selectedFolder, onFoler = onFoler, isExpand = uiState.isExpand, onDismissRequest = onDismissRequest, folderList = uiState.folderList, maxCount = maxCount)
+                    GalleryListWithPreviewScreen(onNext = onNext, onClose = onClose, list = uiState.list, onSelectFolder = onSelectFolder, selectedFolder = uiState.selectedFolder, onFoler = onFolder, isExpand = uiState.isExpand, onDismissRequest = onDismissRequest, folderList = uiState.folderList, maxCount = maxCount)
                 } else {
-                    GalleryListScreen(list = uiState.list, onSelectFolder = onSelectFolder, selectedFolder = uiState.selectedFolder, onFolder = onFoler, isExpand = uiState.isExpand, onDismissRequest = onDismissRequest, folderList = uiState.folderList, maxCount = maxCount, onSelectedList = onSelectedList)
+                    GalleryListScreen(list = uiState.list, onSelectFolder = onSelectFolder, selectedFolder = uiState.selectedFolder, onFolder = onFolder, isExpand = uiState.isExpand, onDismissRequest = onDismissRequest, folderList = uiState.folderList, maxCount = maxCount, onSelectedList = onSelectedList)
                 }
             }
             composable("askPermission") {
-                AskPermission(modifier = if (galleryType != 1) Modifier.fillMaxSize() else Modifier.fillMaxWidth().height((LocalConfiguration.current.screenHeightDp * 0.7).dp), onBack = onBack, permissionState = permissionState)
+                AskPermission(modifier = if (galleryType != 1) Modifier.fillMaxSize() else Modifier.fillMaxWidth().height((LocalConfiguration.current.screenHeightDp * 0.7).dp), onBack = onBack)
             }
             composable("shouldShowRationale") {
                 Box {
@@ -100,17 +114,11 @@ private fun GalleryNavHost(uiState: GalleryUiState, onNext: (List<String>) -> Un
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Preview
 @Composable
 fun PreviewGalleryNavHost() {
     GalleryNavHost(
-        uiState = GalleryUiState(),
-        permissionState = object : PermissionState {
-            override val permission: String get() = ""
-            override val status: PermissionStatus get() = PermissionStatus.Granted
-            override fun launchPermissionRequest() {}
-        },
+        uiState = GalleryUiState()
     )
 }

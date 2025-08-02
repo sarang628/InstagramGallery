@@ -87,11 +87,8 @@ dependencies {
 
     implementation(libs.constraintlayout.compose)
 
-    implementation(libs.mediaContentResolver)
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("id.zelory:compressor:3.0.1")
-    implementation("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
-    implementation("com.github.sarang628:ComposePermissionTest:0f86ef39ec")
 }
 
 afterEvaluate {

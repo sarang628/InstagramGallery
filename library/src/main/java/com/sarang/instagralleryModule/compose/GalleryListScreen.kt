@@ -13,44 +13,32 @@ import com.sarang.instagralleryModule.compose.component.FolderListBottomSheetDia
 import com.sarang.instagralleryModule.compose.component.GalleryGridView
 import com.sarang.instagralleryModule.compose.component.GalleryMiddleBar1
 
+/**
+ * @param list 이미지 리스트
+ * @param onSelectFolder 폴더 선택 클릭
+ * @param selectedFolder 선택 된 폴더명
+ * @param isExpand 시트 확장 여부
+ * @param onFolder 폴더 선택
+ * @param onDismissRequest 다이얼로그 닫혔을 때
+ * @param maxCount 최대 선택 갯수
+ * @param onSelectedList 선택한 파일
+ */
 @Composable
-internal fun GalleryListScreen(
-    list: List<String>,                 // 이미지 리스트
-    onSelectFolder: (String) -> Unit,   // 폴더 선택 클릭
-    selectedFolder: String,             // 선택 된 폴더명
-    isExpand: Boolean,                  // 폴더 리스트 다이얼로그 표시 여부
-    onFoler: () -> Unit,                // 폴더 리스트 다이얼로그 클릭
-    onDismissRequest: () -> Unit,       // 폴더 리스트 다이얼로그 닫기 이벤트
-    folderList: List<String>,            // 폴더 리스트
-    maxCount: Int = 10,
-    onSelectedList: (List<String>) -> Unit = {},
-) {
+internal fun GalleryListScreen(list: List<String>, onSelectFolder: (String) -> Unit, selectedFolder: String, isExpand: Boolean, onFolder: () -> Unit, onDismissRequest: () -> Unit, folderList: List<String>, maxCount: Int = 10, onSelectedList: (List<String>) -> Unit = {}, ) {
     var selectedImage by remember { mutableStateOf("") }
     val selectedList = remember { mutableStateListOf<String>() }
     var isMutipleSelected by remember { mutableStateOf(true) }
 
     Box {
         Column {
-            //center of gallery menu
-            GalleryMiddleBar1(
-                folder = selectedFolder,
-                onFolder = onFoler
-            )
-            GalleryGridView(list = list,
-                isMutipleSelected = isMutipleSelected,
-                selectedList = selectedList,
+            GalleryMiddleBar1(folder = selectedFolder, onFolder = onFolder)
+            GalleryGridView(list = list, isMutipleSelected = isMutipleSelected, selectedList = selectedList,
                 onClickPicture = {
                     selectedImage = it
-
                     if (isMutipleSelected) {
-                        if (!selectedList.contains(it)) {
-                            if (selectedList.size < maxCount)
-                                selectedList.add(it)
-                        } else {
-                            selectedList.remove(it)
-                        }
+                        if (!selectedList.contains(it)) { if (selectedList.size < maxCount) selectedList.add(it) }
+                        else { selectedList.remove(it) }
                     }
-
                     onSelectedList.invoke(selectedList)
                 })
         }
@@ -67,21 +55,9 @@ internal fun GalleryListScreen(
 @Composable
 fun PreviewGalleryListScreen() {
     GalleryListScreen(
-        list = ArrayList<String>().apply {
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-            add("")
-        },
+        list = ArrayList<String>().apply { add("");add("");add("");add("");add("");add("");add("");add("");add("");add("");add("") },
         isExpand = false,
-        onFoler = {},
+        onFolder = {},
         onSelectFolder = {},
         selectedFolder = "Selected Folder",
         onDismissRequest = {},

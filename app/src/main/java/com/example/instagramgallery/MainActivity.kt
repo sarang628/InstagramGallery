@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -21,12 +22,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.sarang.instagralleryModule.compose.BottomSendList
 import com.sarang.instagralleryModule.compose.GalleryBottomSheet
 import com.sarang.instagralleryModule.compose.GalleryNavHost
 import com.sarang.instagralleryModule.compose.PreviewGalleryNavHost
 import com.sarang.torang.compose.bottomsheet.PickHeight70PercentBottomSheetScaffold
-import com.sarang.torang.compose.bottomsheet.PreviewImageSelectBottomSheetDialog
 import com.sryang.torang.ui.TorangTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,43 +39,29 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            var show by remember { mutableStateOf(false) }
-            var selectedList: List<String> by remember { mutableStateOf(listOf()) }
             TorangTheme {
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background)
-                ) {
-                    GalleryNavHost(onNext = {
-                        //selected images
-                        Log.d("__MainActivity", TextUtils.join(",", it))
-                    }, onClose = {
+                Surface(modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)) {
+                    val navController = rememberNavController()
 
-                    }, onBack = {}, galleryType = 0
-                    )
-
-                    Box(modifier = Modifier.fillMaxSize())
-                    {
-                        GalleryBottomSheet(
-                            imageSelectBottomSheetScaffold = { show, onHidden, imageSelectCompose, content ->
-                                PickHeight70PercentBottomSheetScaffold(
-                                    show = show,
-                                    onHidden = onHidden,
-                                    imageSelectCompose = imageSelectCompose,
-                                    content = content,
-                                )
-                            },
-                            onSend = {}, onBack = {},
-                            content = {
-                                Box(modifier = Modifier.fillMaxSize())
-                                {
-                                    Button(onClick = { show = true }) {
-                                        Text(text = "show")
-                                    }
+                    NavHost(navController = navController, startDestination = "init"){
+                        composable("init"){
+                            Column {
+                                Button({navController.navigate("GalleryNavHost")}) {
+                                    Text("GalleryNavHost")
                                 }
-                            }, show = show, onHidden = {}
-                        )
+                                Button({navController.navigate("GalleryBottonSheetTest")}) {
+                                    Text("GalleryBottonSheetTest")
+                                }
+                            }
+                        }
+                        composable("GalleryNavHost"){
+                            GalleryNavHost(onNext = { Log.d("__MainActivity", TextUtils.join(",", it)) })
+                        }
+                        composable("GalleryBottonSheetTest"){
+                            GalleryBottonSheetTest()
+                        }
                     }
                 }
             }
@@ -95,4 +84,20 @@ fun test() {
 @Composable
 fun PreviewBottomSendList() {
     BottomSendList(selectedList = listOf(""), onSend = {})
+}
+
+@Composable
+fun GalleryBottonSheetTest(){
+    var show by remember { mutableStateOf(false) }
+    Box(modifier = Modifier.fillMaxSize())
+    {
+        GalleryBottomSheet(
+            imageSelectBottomSheetScaffold = { show, onHidden, imageSelectCompose, content ->
+                PickHeight70PercentBottomSheetScaffold(show = show, onHidden = onHidden, imageSelectCompose = imageSelectCompose, content = content)
+            },
+            content = { Box(modifier = Modifier.fillMaxSize()) { Button(onClick = { show = true }) { Text(text = "show") } } },
+            show = show,
+            onHidden = { show = false }
+        )
+    }
 }

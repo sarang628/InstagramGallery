@@ -50,7 +50,7 @@ fun GalleryBottomSheet(
         imageSelectBottomSheetScaffold.invoke(
             show,
             { selectedList = listOf(); onHidden.invoke() },
-            { if (show) GalleryNavHost(onNext = {}, onClose = {}, onBack = onBack, galleryType = 1, onSelectedList = { selectedList = it }) },
+            { if (show) {} },
             content
         )
         if (selectedList.isNotEmpty())

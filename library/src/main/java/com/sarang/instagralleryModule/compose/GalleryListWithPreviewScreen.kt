@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
  * @param folderList 폴더 리스트
  */
 @Composable
-internal fun GalleryListWithPreviewScreen(onNext: (List<String>) -> Unit = {}, onClose: () -> Unit = {}, list: List<String> = listOf<String>(), onSelectFolder: (String) -> Unit = {}, selectedFolder: String = "", isExpand: Boolean = false, onFolder: () -> Unit = {}, onDismissRequest: () -> Unit = {}, folderList: List<String> = listOf<String>(), maxCount : Int = 10) {
+fun GalleryListWithPreviewScreen(onNext: (List<String>) -> Unit = {}, onClose: () -> Unit = {}, list: List<String> = listOf<String>(), onSelectFolder: (String) -> Unit = {}, selectedFolder: String = "", isExpand: Boolean = false, onFolder: () -> Unit = {}, onDismissRequest: () -> Unit = {}, folderList: List<String> = listOf<String>(), maxCount : Int = 10) {
     var isProgress by remember { mutableStateOf(false) }
     var selectedImage by remember { mutableStateOf("") }
     val selectedList = remember { mutableStateListOf<String>() }

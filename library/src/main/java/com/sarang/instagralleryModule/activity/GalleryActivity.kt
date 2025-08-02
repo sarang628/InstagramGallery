@@ -7,7 +7,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
-import com.sarang.instagralleryModule.compose.GalleryNavHost
 
 class GalleryActivity : ComponentActivity() {
 
@@ -16,7 +15,7 @@ class GalleryActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Column {
-                GalleryNavHost()
+
             }
         }
     }

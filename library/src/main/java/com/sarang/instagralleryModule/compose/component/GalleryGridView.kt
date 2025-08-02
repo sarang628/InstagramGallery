@@ -59,9 +59,9 @@ fun GalleryGridView(
                                     .size(100.dp)
                                     .clickable(
                                         interactionSource = interactionSource,
-                                        indication = rememberRipple(true), onClick = {
-                                            onClickPicture.invoke(list[it])
-                                        }),
+                                        indication = /*rememberRipple(true)*/null,
+                                        onClick = { onClickPicture.invoke(list[it]) }
+                                    ),
                                 contentScale = ContentScale.Crop
                             )
                             if (isMutipleSelected)

@@ -1,3 +1,6 @@
 [submodule "gradle/TorangToml"]
 	path = gradle/TorangToml
 	url = https://github.com/sarang628/TorangToml.git
+[submodule "app/src/main/java/com/example/instagramgallery/di/bottomsheet_di"]
+	path = app/src/main/java/com/example/instagramgallery/di/bottomsheet_di
+	url = https://github.com/sarang628/bottomsheet_di.git

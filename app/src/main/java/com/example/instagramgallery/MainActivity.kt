@@ -2,6 +2,8 @@ package com.example.instagramgallery
 
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -19,11 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.samples.apps.sunflower.ui.TorangTheme
 import com.sarang.instagralleryModule.compose.BottomSendList
 import com.sarang.instagralleryModule.compose.GalleryBottomSheet
+import com.sarang.instagralleryModule.compose.GalleryNavHost
 import com.sarang.instagralleryModule.compose.PreviewGalleryNavHost
-import com.sarang.torang.compose.bottomsheet.ImageSelectBottomSheetScaffold
+import com.sarang.torang.compose.bottomsheet.PickHeight70PercentBottomSheetScaffold
+import com.sarang.torang.compose.bottomsheet.PreviewImageSelectBottomSheetDialog
+import com.sryang.torang.ui.TorangTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,19 +44,19 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                 ) {
-                    /*GalleryNavHost(onNext = {
+                    GalleryNavHost(onNext = {
                         //selected images
-                        Log.d("MainActivity", TextUtils.join(",", it))
+                        Log.d("__MainActivity", TextUtils.join(",", it))
                     }, onClose = {
 
-                    }, onBack = {}, galleryType = 1
-                    )*/
+                    }, onBack = {}, galleryType = 0
+                    )
 
                     Box(modifier = Modifier.fillMaxSize())
                     {
                         GalleryBottomSheet(
                             imageSelectBottomSheetScaffold = { show, onHidden, imageSelectCompose, content ->
-                                ImageSelectBottomSheetScaffold(
+                                PickHeight70PercentBottomSheetScaffold(
                                     show = show,
                                     onHidden = onHidden,
                                     imageSelectCompose = imageSelectCompose,
@@ -80,7 +84,7 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun test() {
-    ImageSelectBottomSheetScaffold(show = true, onHidden = { /*TODO*/ }, imageSelectCompose = {
+    PickHeight70PercentBottomSheetScaffold(show = true, onHidden = { /*TODO*/ }, imageSelectCompose = {
         PreviewGalleryNavHost()
     }) {
 

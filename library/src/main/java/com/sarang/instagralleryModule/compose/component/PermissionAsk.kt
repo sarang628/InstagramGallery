@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AskPermission(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier.fillMaxSize(),
+    onRequestPermission: () -> Unit = {},
     onBack: () -> Unit = {},
 ) {
     Scaffold(
@@ -49,7 +49,7 @@ fun AskPermission(
             ) {
                 Text(text = "갤러리를 이용하기위해선 이미지 사용권한이 필요합니다.")
                 Spacer(modifier = Modifier.height(10.dp))
-                Button(onClick = onClick) { Text(text = "권한요청하기") }
+                Button(onClick = onRequestPermission) { Text(text = "권한요청하기") }
             }
         }
     }

@@ -78,6 +78,6 @@ dependencies {
     implementation(libs.theme)
     implementation(libs.torangBottomSheet)
     implementation(libs.mediaContentResolver)
-    implementation("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
-    implementation("com.github.sarang628:ComposePermissionTest:0f86ef39ec")
+    implementation(libs.composePermissionTest)
+    implementation(libs.accompanist.permissions)
 }

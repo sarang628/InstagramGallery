@@ -27,19 +27,19 @@ import com.sarang.instagralleryModule.compose.component.GalleryTitleBar
 import com.sarang.instagralleryModule.util.compress
 import kotlinx.coroutines.launch
 
+/**
+ * @param onNext 다음 클릭
+ * @param onClose 다음 클릭
+ * @param list 이미지 리스트
+ * @param onSelectFolder 폴더 선택 클릭
+ * @param selectedFolder 선택 된 폴더명
+ * @param isExpand 폴더 리스트 다이얼로그 표시 여부
+ * @param onFolder 폴더 리스트 다이얼로그 클릭
+ * @param onDismissRequest 폴더 리스트 다이얼로그 닫기 이벤트
+ * @param folderList 폴더 리스트
+ */
 @Composable
-internal fun GalleryListWithPreviewScreen(
-    onNext: (List<String>) -> Unit,     // 다음 클릭
-    onClose: () -> Unit,                // 닫기 클릭
-    list: List<String>,                 // 이미지 리스트
-    onSelectFolder: (String) -> Unit,   // 폴더 선택 클릭
-    selectedFolder: String,             // 선택 된 폴더명
-    isExpand: Boolean,                  // 폴더 리스트 다이얼로그 표시 여부
-    onFoler: () -> Unit,                // 폴더 리스트 다이얼로그 클릭
-    onDismissRequest: () -> Unit,       // 폴더 리스트 다이얼로그 닫기 이벤트
-    folderList: List<String>,            // 폴더 리스트
-    maxCount : Int = 10
-) {
+internal fun GalleryListWithPreviewScreen(onNext: (List<String>) -> Unit = {}, onClose: () -> Unit = {}, list: List<String> = listOf<String>(), onSelectFolder: (String) -> Unit = {}, selectedFolder: String = "", isExpand: Boolean = false, onFolder: () -> Unit = {}, onDismissRequest: () -> Unit = {}, folderList: List<String> = listOf<String>(), maxCount : Int = 10) {
     var isProgress by remember { mutableStateOf(false) }
     var selectedImage by remember { mutableStateOf("") }
     val selectedList = remember { mutableStateListOf<String>() }
@@ -49,15 +49,11 @@ internal fun GalleryListWithPreviewScreen(
 
     Box {
         Column {
-            //titlebar
             GalleryTitleBar(
                 onNext = {
                     coroutine.launch {
                         isProgress = true
-                        val compressedImage =
-                            compress(if (isMutipleSelected) selectedList else ArrayList<String>().apply {
-                                add(selectedImage)
-                            }, context = context)
+                        val compressedImage = compress(if (isMutipleSelected) selectedList else ArrayList<String>().apply { add(selectedImage) }, context = context)
                         onNext.invoke(compressedImage)
                         isProgress = false
                     }
@@ -66,77 +62,36 @@ internal fun GalleryListWithPreviewScreen(
                 isAvailableNext = if (isMutipleSelected) !selectedList.isEmpty() else selectedImage.isNotEmpty()
             )
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(selectedImage)
-                    .build(),
+                model = ImageRequest.Builder(LocalContext.current).data(selectedImage).build(),
                 contentDescription = "",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp),
-                //contentScale = ContentScale.Crop
+                modifier = Modifier.fillMaxWidth().height(300.dp),
             )
-            //center of gallery menu
-            GalleryMiddleBar(
-                folder = selectedFolder,
-                isMutipleSelected = isMutipleSelected,
-                onFolder = onFoler,
-                onSelectMutiple = {
-                    isMutipleSelected = !isMutipleSelected
-                }
-            )
-            GalleryGridView(list = list,
-                isMutipleSelected = isMutipleSelected,
-                selectedList = selectedList,
+            GalleryMiddleBar(folder = selectedFolder, isMutipleSelected = isMutipleSelected, onFolder = onFolder, onSelectMutiple = { isMutipleSelected = !isMutipleSelected })
+            GalleryGridView(list = list, isMutipleSelected = isMutipleSelected, selectedList = selectedList,
                 onClickPicture = {
                     selectedImage = it
-
                     if (isMutipleSelected) {
-                        if (!selectedList.contains(it)) {
-                            if (selectedList.size < maxCount)
-                                selectedList.add(it)
-                        } else {
-                            selectedList.remove(it)
-                        }
+                        if (!selectedList.contains(it)) { if (selectedList.size < maxCount) selectedList.add(it) }
+                        else { selectedList.remove(it) }
                     }
                 })
         }
-        FolderListBottomSheetDialog(
-            isExpand,
-            onSelect = onSelectFolder,
-            onDismissRequest = onDismissRequest,
-            list = folderList
-        )
+        FolderListBottomSheetDialog(isExpand = isExpand, onSelect = onSelectFolder, onDismissRequest = onDismissRequest, list = folderList)
 
         if (isProgress)
-            Column(
-                Modifier.align(Alignment.Center),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+            Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
                 CircularProgressIndicator()
                 Text(text = "compressing..")
             }
-
     }
 }
 
 @Preview
 @Composable
 fun PreviewGalleryScreen() {
-    GalleryListWithPreviewScreen(onNext = {}, onClose = {}, list = ArrayList<String>().apply {
-        add("")
-        add("")
-        add("")
-        add("")
-        add("")
-        add("")
-        add("")
-        add("")
-        add("")
-        add("")
-        add("")
-    },
+    GalleryListWithPreviewScreen(onNext = {}, onClose = {}, list = ArrayList<String>().apply { add("");add("");add("");add("");add("");add("");add("");add("");add("");add("");add(""); },
         isExpand = false,
-        onFoler = {},
+        onFolder = {},
         onSelectFolder = {},
         selectedFolder = "Selected Folder",
         onDismissRequest = {},

@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,9 +40,11 @@ import kotlinx.coroutines.launch
  * @param onFolder 폴더 리스트 다이얼로그 클릭
  * @param onDismissRequest 폴더 리스트 다이얼로그 닫기 이벤트
  * @param folderList 폴더 리스트
+ * @param isPhotoPickerMode Photo Picker 모드
+ * @param onPhotoPicker photo picker 선택
  */
 @Composable
-fun GalleryListWithPreviewScreen(onNext: (List<String>) -> Unit = {}, onClose: () -> Unit = {}, list: List<String> = listOf<String>(), onSelectFolder: (String) -> Unit = {}, selectedFolder: String = "", isExpand: Boolean = false, onFolder: () -> Unit = {}, onDismissRequest: () -> Unit = {}, folderList: List<String> = listOf<String>(), maxCount : Int = 10) {
+fun GalleryListWithPreviewScreen(onNext: (List<String>) -> Unit = {}, onClose: () -> Unit = {}, list: List<String> = listOf<String>(), onSelectFolder: (String) -> Unit = {}, selectedFolder: String = "", isExpand: Boolean = false, onFolder: () -> Unit = {}, onDismissRequest: () -> Unit = {}, folderList: List<String> = listOf<String>(), maxCount : Int = 10, isPhotoPickerMode : Boolean = false, onPhotoPicker : ()->Unit = {}) {
     var isProgress by remember { mutableStateOf(false) }
     var selectedImage by remember { mutableStateOf("") }
     val selectedList = remember { mutableStateListOf<String>() }
@@ -67,6 +72,10 @@ fun GalleryListWithPreviewScreen(onNext: (List<String>) -> Unit = {}, onClose: (
                 modifier = Modifier.fillMaxWidth().height(300.dp),
             )
             GalleryMiddleBar(folder = selectedFolder, isMutipleSelected = isMutipleSelected, onFolder = onFolder, onSelectMutiple = { isMutipleSelected = !isMutipleSelected })
+            if(isPhotoPickerMode == true)
+                Button(modifier = Modifier.fillMaxWidth(), onClick = onPhotoPicker, shape = RoundedCornerShape(0.dp)) {
+                    Text("Select Photo")
+                }
             GalleryGridView(list = list, isMutipleSelected = isMutipleSelected, selectedList = selectedList,
                 onClickPicture = {
                     selectedImage = it
@@ -95,6 +104,6 @@ fun PreviewGalleryScreen() {
         onSelectFolder = {},
         selectedFolder = "Selected Folder",
         onDismissRequest = {},
-        folderList = ArrayList()
+        folderList = listOf("a","b","c","d","e","f","g")
     )
 }

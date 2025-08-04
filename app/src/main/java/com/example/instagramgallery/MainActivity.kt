@@ -1,15 +1,9 @@
 package com.example.instagramgallery
 
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia
-import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -29,13 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.instagramgallery.di.gallery.GalleryWithPermission
-import com.example.instagramgallery.di.gallery.GalleryWithPhotoPicker
 import com.sarang.instagralleryModule.compose.BottomSendList
 import com.sarang.instagralleryModule.compose.GalleryBottomSheet
-import com.sarang.instagralleryModule.compose.GalleryListWithPreviewScreen
 import com.sarang.torang.compose.bottomsheet.PickHeight70PercentBottomSheetScaffold
-import com.sryang.library.compose.workflow.BestPracticeViewModel
 import com.sryang.torang.ui.TorangTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -66,13 +56,13 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         composable("GalleryWithPermission"){
-                            GalleryWithPermission(viewModel = BestPracticeViewModel())
+                            //GalleryWithPermission(viewModel = BestPracticeViewModel())
                         }
                         composable("GalleryBottonSheetTest"){
                             GalleryBottonSheetTest()
                         }
                         composable("GalleryWithPhotoPicker"){
-                            GalleryWithPhotoPicker()
+                            //GalleryWithPhotoPicker()
                         }
                     }
                 }

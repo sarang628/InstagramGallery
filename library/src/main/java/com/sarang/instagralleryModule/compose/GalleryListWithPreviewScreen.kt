@@ -1,13 +1,17 @@
 package com.sarang.instagralleryModule.compose
 
+import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +32,7 @@ import com.sarang.instagralleryModule.compose.component.GalleryGridView
 import com.sarang.instagralleryModule.compose.component.GalleryMiddleBar
 import com.sarang.instagralleryModule.compose.component.GalleryTitleBar
 import com.sarang.instagralleryModule.util.compress
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
@@ -44,54 +49,68 @@ import kotlinx.coroutines.launch
  * @param onPhotoPicker photo picker 선택
  */
 @Composable
-fun GalleryListWithPreviewScreen(onNext: (List<String>) -> Unit = {}, onClose: () -> Unit = {}, list: List<String> = listOf<String>(), onSelectFolder: (String) -> Unit = {}, selectedFolder: String = "", isExpand: Boolean = false, onFolder: () -> Unit = {}, onDismissRequest: () -> Unit = {}, folderList: List<String> = listOf<String>(), maxCount : Int = 10, isPhotoPickerMode : Boolean = false, onPhotoPicker : ()->Unit = {}) {
-    var isProgress by remember { mutableStateOf(false) }
-    var selectedImage by remember { mutableStateOf("") }
-    val selectedList = remember { mutableStateListOf<String>() }
-    var isMutipleSelected by remember { mutableStateOf(false) }
-    val coroutine = rememberCoroutineScope()
-    val context = LocalContext.current
+fun GalleryListWithPreviewScreen(onNext             : (List<String>) -> Unit    = {},
+                                 onClose            : () -> Unit                = {},
+                                 list               : List<String>              = listOf(),
+                                 onSelectFolder     : (String) -> Unit          = {},
+                                 selectedFolder     : String                    = "",
+                                 isExpand           : Boolean                   = false,
+                                 onFolder           : () -> Unit                = {},
+                                 onDismissRequest   : () -> Unit                = {},
+                                 folderList         : List<String>              = listOf(),
+                                 maxCount           : Int                       = 10,
+                                 isPhotoPickerMode  : Boolean                   = false,
+                                 onPhotoPicker      : ()->Unit                  = {}) {
 
-    Box {
-        Column {
-            GalleryTitleBar(
-                onNext = {
-                    coroutine.launch {
-                        isProgress = true
-                        val compressedImage = compress(if (isMutipleSelected) selectedList else ArrayList<String>().apply { add(selectedImage) }, context = context)
-                        onNext.invoke(compressedImage)
-                        isProgress = false
-                    }
-                },
-                onClose = onClose,
-                isAvailableNext = if (isMutipleSelected) !selectedList.isEmpty() else selectedImage.isNotEmpty()
-            )
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data(selectedImage).build(),
-                contentDescription = "",
-                modifier = Modifier.fillMaxWidth().height(300.dp),
-            )
-            GalleryMiddleBar(folder = selectedFolder, isMutipleSelected = isMutipleSelected, onFolder = onFolder, onSelectMutiple = { isMutipleSelected = !isMutipleSelected })
-            if(isPhotoPickerMode == true)
-                Button(modifier = Modifier.fillMaxWidth(), onClick = onPhotoPicker, shape = RoundedCornerShape(0.dp)) {
-                    Text("Select Photo")
+    var isProgress          : Boolean               by remember { mutableStateOf(false) }
+    var selectedImage       : String                by remember { mutableStateOf("") }
+    val selectedList        : MutableList<String>   = remember { mutableStateListOf<String>() }
+    var isMutipleSelected   : Boolean               by remember { mutableStateOf(false) }
+    val coroutine           : CoroutineScope        = rememberCoroutineScope()
+    val context             : Context               = LocalContext.current
+
+    Scaffold(topBar = {
+        GalleryTitleBar(
+            onNext = {
+                coroutine.launch {
+                    isProgress = true
+                    val compressedImage = compress(if (isMutipleSelected) selectedList else ArrayList<String>().apply { add(selectedImage) }, context = context)
+                    onNext.invoke(compressedImage)
+                    isProgress = false
                 }
-            GalleryGridView(list = list, isMutipleSelected = isMutipleSelected, selectedList = selectedList,
-                onClickPicture = {
-                    selectedImage = it
-                    if (isMutipleSelected) {
-                        if (!selectedList.contains(it)) { if (selectedList.size < maxCount) selectedList.add(it) }
-                        else { selectedList.remove(it) }
+            },
+            onClose = onClose,
+            isAvailableNext = if (isMutipleSelected) !selectedList.isEmpty() else selectedImage.isNotEmpty()
+        )
+    }) {
+        Box(modifier = Modifier.fillMaxSize()){
+            Column(Modifier.padding(it)) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current).data(selectedImage).build(),
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxWidth().height(300.dp),
+                )
+                GalleryMiddleBar(folder = selectedFolder, isMutipleSelected = isMutipleSelected, onFolder = onFolder, onSelectMutiple = { isMutipleSelected = !isMutipleSelected })
+                if(isPhotoPickerMode)
+                    Button(modifier = Modifier.fillMaxWidth(), onClick = onPhotoPicker, shape = RoundedCornerShape(0.dp)) {
+                        Text("Select Photo")
                     }
-                })
-        }
-        FolderListBottomSheetDialog(isExpand = isExpand, onSelect = onSelectFolder, onDismissRequest = onDismissRequest, list = folderList)
-
-        if (isProgress)
-            Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
-                CircularProgressIndicator()
-                Text(text = "compressing..")
+                GalleryGridView(list = list, isMutipleSelected = isMutipleSelected, selectedList = selectedList,
+                    onClickPicture = {
+                        selectedImage = it
+                        if (isMutipleSelected) {
+                            if (!selectedList.contains(it)) { if (selectedList.size < maxCount) selectedList.add(it) }
+                            else { selectedList.remove(it) }
+                        }
+                    })
             }
+            FolderListBottomSheetDialog(isExpand = isExpand, onSelect = onSelectFolder, onDismissRequest = onDismissRequest, list = folderList)
+            if (isProgress)
+                Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+                    CircularProgressIndicator()
+                    Text(text = "compressing..")
+                }
+        }
     }
 }
 

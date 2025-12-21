@@ -13,6 +13,12 @@ dependencyResolutionManagement {
         maven("https://jitpack.io")
         maven("https://devrepo.kakao.com/nexus/content/groups/public/")
     }
+
+    versionCatalogs {
+        create("libs") {
+            from(files("gradle/TorangToml/libs.versions.toml"))
+        }
+    }
 }
 
 rootProject.name = "InstagramGallery"

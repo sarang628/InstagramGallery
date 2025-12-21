@@ -4,3 +4,15 @@
 [submodule "app/src/main/java/com/example/instagramgallery/di/bottomsheet_di"]
 	path = app/src/main/java/com/example/instagramgallery/di/bottomsheet_di
 	url = https://github.com/sarang628/bottomsheet_di.git
+[submodule "app/src/main/java/com/example/instagramgallery/di/image"]
+	path = app/src/main/java/com/example/instagramgallery/di/image
+	url = https://github.com/sarang628/image.git
+[submodule "app/src/main/java/com/example/instagramgallery/di/dialogsbox_di"]
+	path = app/src/main/java/com/example/instagramgallery/di/dialogsbox_di
+	url = https://github.com/sarang628/dialogsbox_di.git
+[submodule "app/src/main/java/com/example/instagramgallery/di/pinchzoom"]
+	path = app/src/main/java/com/example/instagramgallery/di/pinchzoom
+	url = https://github.com/sarang628/pinchzoom.git
+[submodule "app/src/main/java/com/example/instagramgallery/di/Instagramgallery_di"]
+	path = app/src/main/java/com/example/instagramgallery/di/Instagramgallery_di
+	url = https://github.com/sarang628/Instagramgallery_di.git

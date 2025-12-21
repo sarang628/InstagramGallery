@@ -23,9 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.instagramgallery.di.Instagramgallery_di.GalleryWithPhotoPicker
 import com.sarang.instagralleryModule.compose.BottomSendList
 import com.sarang.instagralleryModule.compose.GalleryBottomSheet
-import com.sarang.torang.compose.bottomsheet.PickHeight70PercentBottomSheetScaffold
 import com.sryang.torang.ui.TorangTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -62,23 +62,12 @@ class MainActivity : ComponentActivity() {
                             GalleryBottonSheetTest()
                         }
                         composable("GalleryWithPhotoPicker"){
-                            //GalleryWithPhotoPicker()
+                            GalleryWithPhotoPicker()
                         }
                     }
                 }
             }
         }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@Preview
-@Composable
-fun test() {
-    PickHeight70PercentBottomSheetScaffold(show = true, onHidden = { /*TODO*/ }, imageSelectCompose = {
-
-    }) {
-
     }
 }
 
@@ -88,6 +77,7 @@ fun PreviewBottomSendList() {
     BottomSendList(selectedList = listOf(""), onSend = {})
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun GalleryBottonSheetTest(){
     var show by remember { mutableStateOf(false) }
@@ -95,7 +85,7 @@ fun GalleryBottonSheetTest(){
     {
         GalleryBottomSheet(
             imageSelectBottomSheetScaffold = { show, onHidden, imageSelectCompose, content ->
-                PickHeight70PercentBottomSheetScaffold(show = show, onHidden = onHidden, imageSelectCompose = imageSelectCompose, content = content)
+                //PickHeight70PercentBottomSheetScaffold(show = show, onHidden = onHidden, imageSelectCompose = imageSelectCompose, content = content)
             },
             content = { Box(modifier = Modifier.fillMaxSize()) { Button(onClick = { show = true }) { Text(text = "show") } } },
             show = show,

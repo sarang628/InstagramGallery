@@ -24,7 +24,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
+        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtension.get()
     }
 
     compileOptions {
@@ -76,8 +76,9 @@ dependencies {
 
 
     implementation(libs.theme)
-    implementation(libs.torangBottomSheet)
     implementation(libs.mediaContentResolver)
     implementation(libs.composePermissionTest)
     implementation(libs.accompanist.permissions)
+    implementation(libs.coil)
+    implementation(libs.commonImageLoader)
 }

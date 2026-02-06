@@ -6,9 +6,10 @@ import androidx.core.net.toUri
 import id.zelory.compressor.Compressor
 import java.io.File
 
-suspend fun compress(file: List<String>, context: Context): ArrayList<String> {
+suspend fun compress(file       : List<String> = listOf(),
+                     context    : Context): ArrayList<String> {
     val list = ArrayList<String>()
-    file.forEach() {
+    file.forEach {
         if (it.startsWith("content:")) {
             val uri = it.toUri()
             val inputStream = context.contentResolver.openInputStream(uri)
@@ -23,6 +24,6 @@ suspend fun compress(file: List<String>, context: Context): ArrayList<String> {
             )
         }
     }
-    Log.d("__compress", "compressed Image : ${list}")
+    Log.d("__compress", "compressed Image : $list")
     return list
 }

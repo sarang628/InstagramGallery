@@ -1,6 +1,7 @@
 package com.sarang.instagralleryModule.compose
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,19 +36,7 @@ import com.sarang.instagralleryModule.util.compress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-/**
- * @param onNext 다음 클릭
- * @param onClose 다음 클릭
- * @param list 이미지 리스트
- * @param onSelectFolder 폴더 선택 클릭
- * @param selectedFolder 선택 된 폴더명
- * @param isExpand 폴더 리스트 다이얼로그 표시 여부
- * @param onFolder 폴더 리스트 다이얼로그 클릭
- * @param onDismissRequest 폴더 리스트 다이얼로그 닫기 이벤트
- * @param folderList 폴더 리스트
- * @param isPhotoPickerMode Photo Picker 모드
- * @param onPhotoPicker photo picker 선택
- */
+val tag = "__GalleryListWithPreviewScreen"
 @Composable
 fun GalleryListWithPreviewScreen(onNext             : (List<String>) -> Unit    = {},
                                  onClose            : () -> Unit                = {},
@@ -64,7 +53,7 @@ fun GalleryListWithPreviewScreen(onNext             : (List<String>) -> Unit    
 
     var isProgress          : Boolean               by remember { mutableStateOf(false) }
     var selectedImage       : String                by remember { mutableStateOf("") }
-    val selectedList        : MutableList<String>   = remember { mutableStateListOf<String>() }
+    val selectedList        : MutableList<String>   = remember { mutableStateListOf() }
     var isMutipleSelected   : Boolean               by remember { mutableStateOf(false) }
     val coroutine           : CoroutineScope        = rememberCoroutineScope()
     val context             : Context               = LocalContext.current
@@ -74,8 +63,16 @@ fun GalleryListWithPreviewScreen(onNext             : (List<String>) -> Unit    
             onNext = {
                 coroutine.launch {
                     isProgress = true
-                    val compressedImage = compress(if (isMutipleSelected) selectedList else ArrayList<String>().apply { add(selectedImage) }, context = context)
-                    onNext.invoke(compressedImage)
+                    val compressedImage = compress(file = if (isMutipleSelected) selectedList
+                                                          else ArrayList<String>().apply {
+                                                            if(selectedImage.isNotEmpty()) add(selectedImage)
+                                                                                         },
+                                                   context = context)
+                    if(compressedImage.isNotEmpty()) {
+                        onNext.invoke(compressedImage)
+                    }else{
+                        Log.w(tag ,"compressedImage is empty. next doesn't work")
+                    }
                     isProgress = false
                 }
             },

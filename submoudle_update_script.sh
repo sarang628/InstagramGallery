@@ -13,3 +13,4 @@ git submodule foreach '
     else
         echo "❌ 서브모듈 [$name]에는 main 브랜치가 없습니다."
     fi
+'

@@ -84,7 +84,7 @@ fun GalleryListWithPreviewScreen(viewModel          : GalleryListWithPreviewView
     Scaffold(topBar = {
         GalleryTitleBar(
             onNext          = { scope.launch {
-                viewModel.onNext(context)
+                onNext(viewModel.onNext(context))
             } },
             onClose         = onClose,
             isAvailableNext = uiState.isAvailableNext

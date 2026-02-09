@@ -16,12 +16,14 @@ class GalleryListWithPreviewViewModel @Inject constructor() : ViewModel() {
     var uiState : GalleryListWithPreviewUIState by mutableStateOf(GalleryListWithPreviewUIState())
         private set
 
-    suspend fun onNext(context : Context) {
+    suspend fun onNext(context : Context) : List<String> {
         uiState = uiState.copy(isProgress = true)
         val compressedImages = compress(file     = uiState.files,
                                        context  = context)
         uiState.copy(compressedImages = compressedImages)
         uiState = uiState.copy(isProgress = false)
+
+        return compressedImages
     }
 
     fun toggleMultipleSelect() {

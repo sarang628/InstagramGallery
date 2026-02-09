@@ -31,7 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
-import coil.compose.AsyncImage
+import com.sarang.instagralleryModule.compose.component.ImageLoadData
+import com.sarang.instagralleryModule.compose.component.LocalImageLoader
 
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -73,7 +74,13 @@ fun BottomSendList(modifier: Modifier = Modifier, selectedList: List<String>, on
             LazyRow(modifier = Modifier.layoutId("sendList").fillMaxWidth().height(100.dp), contentPadding = PaddingValues(horizontal = 5.dp), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
                 items(selectedList.size) {
                     Box(modifier = Modifier.padding(horizontal = 3.dp).height(80.dp).clip(RoundedCornerShape(8.dp))) {
-                        AsyncImage(modifier = Modifier.width(40.dp).height(80.dp), model = selectedList[it], contentDescription = "", contentScale = ContentScale.Crop)
+                        LocalImageLoader.current.invoke(
+                            ImageLoadData(
+                                modifier = Modifier.width(40.dp).height(80.dp),
+                                url = selectedList[it],
+                                contentScale = ContentScale.Crop
+                            )
+                        )
                     }
                 }
             }

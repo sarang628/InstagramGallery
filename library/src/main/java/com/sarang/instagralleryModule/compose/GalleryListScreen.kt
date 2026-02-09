@@ -27,15 +27,15 @@ import com.sarang.instagralleryModule.compose.component.GalleryMiddleBar1
 internal fun GalleryListScreen(list: List<String>, onSelectFolder: (String) -> Unit, selectedFolder: String, isExpand: Boolean, onFolder: () -> Unit, onDismissRequest: () -> Unit, folderList: List<String>, maxCount: Int = 10, onSelectedList: (List<String>) -> Unit = {}, ) {
     var selectedImage by remember { mutableStateOf("") }
     val selectedList = remember { mutableStateListOf<String>() }
-    var isMutipleSelected by remember { mutableStateOf(true) }
+    var isMultipleSelected by remember { mutableStateOf(true) }
 
     Box {
         Column {
             GalleryMiddleBar1(folder = selectedFolder, onFolder = onFolder)
-            GalleryGridView(list = list, isMutipleSelected = isMutipleSelected, selectedList = selectedList,
+            GalleryGridView(list = list, isMultipleSelected = isMultipleSelected, selectedList = selectedList,
                 onClickPicture = {
                     selectedImage = it
-                    if (isMutipleSelected) {
+                    if (isMultipleSelected) {
                         if (!selectedList.contains(it)) { if (selectedList.size < maxCount) selectedList.add(it) }
                         else { selectedList.remove(it) }
                     }

@@ -87,7 +87,6 @@ dependencies {
 
     implementation(libs.constraintlayout.compose)
 
-    implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("id.zelory:compressor:3.0.1")
 }
 

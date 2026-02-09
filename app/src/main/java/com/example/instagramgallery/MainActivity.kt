@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
@@ -14,18 +13,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.instagramgallery.di.Instagramgallery_di.GalleryWithPhotoPicker
-import com.sarang.instagralleryModule.compose.BottomSendList
-import com.sarang.instagralleryModule.compose.GalleryBottomSheet
 import com.sryang.torang.ui.TorangTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,17 +37,7 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(navController = navController, startDestination = "init"){
                         composable("init"){
-                            Column {
-                                Button({navController.navigate("GalleryWithPermission")}) {
-                                    Text("GalleryWithPermission")
-                                }
-                                Button({navController.navigate("GalleryBottonSheetTest")}) {
-                                    Text("GalleryBottonSheetTest")
-                                }
-                                Button({navController.navigate("GalleryWithPhotoPicker")}) {
-                                    Text("GalleryWithPhotoPicker")
-                                }
-                            }
+                            Menu(navController = navController)
                         }
                         composable("GalleryWithPermission"){
                             //GalleryWithPermission(viewModel = BestPracticeViewModel())
@@ -69,27 +53,20 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
 
-@Preview(showBackground = true, backgroundColor = 0xFFEEEEEE)
-@Composable
-fun PreviewBottomSendList() {
-    BottomSendList(selectedList = listOf(""), onSend = {})
-}
-
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@Composable
-fun GalleryBottonSheetTest(){
-    var show by remember { mutableStateOf(false) }
-    Box(modifier = Modifier.fillMaxSize())
-    {
-        GalleryBottomSheet(
-            imageSelectBottomSheetScaffold = { show, onHidden, imageSelectCompose, content ->
-                //PickHeight70PercentBottomSheetScaffold(show = show, onHidden = onHidden, imageSelectCompose = imageSelectCompose, content = content)
-            },
-            content = { Box(modifier = Modifier.fillMaxSize()) { Button(onClick = { show = true }) { Text(text = "show") } } },
-            show = show,
-            onHidden = { show = false }
-        )
+    @Preview
+    @Composable
+    fun Menu(navController : NavHostController = rememberNavController()){
+        Column {
+            Button({navController.navigate("GalleryWithPermission")}) {
+                Text("GalleryWithPermission")
+            }
+            Button({navController.navigate("GalleryBottonSheetTest")}) {
+                Text("GalleryBottonSheetTest")
+            }
+            Button({navController.navigate("GalleryWithPhotoPicker")}) {
+                Text("GalleryWithPhotoPicker")
+            }
+        }
     }
 }
